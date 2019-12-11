@@ -4,6 +4,48 @@ defmodule LineSdkTest.DecoderTest do
 
   alias LineSdk.Model
 
+  test "parse image message external" do
+    input =
+      ~s(
+        {
+          "id": "id",
+          "type": "image",
+          "contentProvider": {
+            "type": "external",
+            "originalContentUrl": "orig",
+            "previewImageUrl": "prev"
+          }
+        }
+      )
+      |> Jason.decode!()
+
+    expect = %Model.ImageMessage{
+      id: "id",
+      provider: "external",
+      original_url: "orig",
+      preview_url: "prev"
+    }
+
+    assert LineSdk.Decoder.decode(input) == {:ok, expect}
+  end
+
+  test "parse image message line" do
+    input =
+      ~s(
+        {
+          "id": "id",
+          "type": "image",
+          "contentProvider": {
+            "type": "line"
+          }
+        }
+      )
+      |> Jason.decode!()
+
+    expect = %Model.ImageMessage{id: "id", provider: "line"}
+    assert LineSdk.Decoder.decode(input) == {:ok, expect}
+  end
+
   test "parse source group" do
     input =
       ~s(
@@ -69,8 +111,7 @@ defmodule LineSdkTest.DecoderTest do
 
     expect = %Model.MessageEvent{
       timestamp: ~U[2019-12-09 11:35:37.932Z],
-      id: "msg_id",
-      message: %Model.TextMessage{text: "!call"},
+      message: %Model.TextMessage{id: "msg_id", text: "!call"},
       reply_token: "reply_token",
       source: %Model.SourceUser{user_id: "user_id"}
     }
@@ -82,13 +123,14 @@ defmodule LineSdkTest.DecoderTest do
     input =
       ~s(
         {
+          "id": "id",
           "type": "text",
           "text": "hello"
         }
       )
       |> Jason.decode!()
 
-    expect = %Model.TextMessage{text: "hello"}
+    expect = %Model.TextMessage{text: "hello", id: "id"}
     assert LineSdk.Decoder.decode(input) == {:ok, expect}
   end
 end

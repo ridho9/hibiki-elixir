@@ -1,5 +1,5 @@
 defmodule LineSdk.Model.TextMessage do
-  defstruct text: ""
+  defstruct text: "", id: nil
 
-  @type t :: %__MODULE__{text: String.t()}
+  @type t :: %__MODULE__{text: String.t(), id: String.t() | nil}
 end

@@ -13,13 +13,11 @@ defmodule LineSdk.Decoder do
         },
         opts
       ) do
-    with %{"id" => id} = message,
-         {:ok, message} <- decode(message, opts),
+    with {:ok, message} <- decode(message, opts),
          {:ok, timestamp} <- DateTime.from_unix(timestamp, :millisecond),
          {:ok, source} <- decode(source, opts) do
       {:ok,
        %Model.MessageEvent{
-         id: id,
          message: message,
          timestamp: timestamp,
          reply_token: reply_token,
@@ -28,8 +26,28 @@ defmodule LineSdk.Decoder do
     end
   end
 
-  def decode(%{"type" => "text", "text" => text}, _opts) do
-    {:ok, %Model.TextMessage{text: text}}
+  def decode(
+        %{
+          "type" => "image",
+          "id" => id,
+          "contentProvider" => %{
+            "type" => "external",
+            "originalContentUrl" => orig,
+            "previewImageUrl" => prev
+          }
+        },
+        _opts
+      ) do
+    {:ok,
+     %Model.ImageMessage{id: id, provider: "external", original_url: orig, preview_url: prev}}
+  end
+
+  def decode(%{"type" => "image", "id" => id, "contentProvider" => %{"type" => "line"}}, _opts) do
+    {:ok, %Model.ImageMessage{id: id, provider: "line"}}
+  end
+
+  def decode(%{"type" => "text", "text" => text, "id" => id}, _opts) do
+    {:ok, %Model.TextMessage{text: text, id: id}}
   end
 
   def decode(%{"type" => "user", "userId" => user_id}, _opts) do
