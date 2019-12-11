@@ -4,6 +4,6 @@ defmodule LineSdk.Model do
   @type message_object :: Model.TextMessage.t()
 
   defmodule Source do
-    @type t :: Model.SourceUser.t()
+    @type t :: Model.SourceUser.t() | Model.SourceGroup.t()
   end
 end

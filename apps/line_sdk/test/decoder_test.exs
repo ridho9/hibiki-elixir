@@ -4,6 +4,35 @@ defmodule LineSdkTest.DecoderTest do
 
   alias LineSdk.Model
 
+  test "parse source group" do
+    input =
+      ~s(
+        {
+          "type": "group",
+          "groupId": "group_id",
+          "userId": "user_id"
+        }
+      )
+      |> Jason.decode!()
+
+    expect = %Model.SourceGroup{group_id: "group_id", user_id: "user_id"}
+    assert LineSdk.Decoder.decode(input) == {:ok, expect}
+  end
+
+  test "parse source group no user" do
+    input =
+      ~s(
+        {
+          "type": "group",
+          "groupId": "group_id"
+        }
+      )
+      |> Jason.decode!()
+
+    expect = %Model.SourceGroup{group_id: "group_id"}
+    assert LineSdk.Decoder.decode(input) == {:ok, expect}
+  end
+
   test "parse source user" do
     input =
       ~s(

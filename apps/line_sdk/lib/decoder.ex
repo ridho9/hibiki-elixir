@@ -36,6 +36,22 @@ defmodule LineSdk.Decoder do
     {:ok, %Model.SourceUser{user_id: user_id}}
   end
 
+  def decode(%{"type" => "group", "userId" => user_id, "groupId" => group_id}, _opts) do
+    {:ok, %Model.SourceGroup{group_id: group_id, user_id: user_id}}
+  end
+
+  def decode(%{"type" => "group", "groupId" => group_id}, _opts) do
+    {:ok, %Model.SourceGroup{group_id: group_id}}
+  end
+
+  def decode(%{"type" => "room", "userId" => user_id, "roomId" => room_id}, _opts) do
+    {:ok, %Model.SourceRoom{room_id: room_id, user_id: user_id}}
+  end
+
+  def decode(%{"type" => "room", "roomId" => room_id}, _opts) do
+    {:ok, %Model.SourceRoom{room_id: room_id}}
+  end
+
   def decode(body, _opts) do
     {:ok, body}
   end
