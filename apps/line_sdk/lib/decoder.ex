@@ -3,6 +3,12 @@ defmodule LineSdk.Decoder do
 
   def decode(body, opts \\ [])
 
+  def decode(%{"destination" => destination, "events" => events}, opts) do
+    with {:ok, events} <- decode(events, opts) do
+      {:ok, %Model.WebhookEvent{destination: destination, events: events}}
+    end
+  end
+
   def decode(
         %{
           "type" => "message",
@@ -68,6 +74,21 @@ defmodule LineSdk.Decoder do
 
   def decode(%{"type" => "room", "roomId" => room_id}, _opts) do
     {:ok, %Model.SourceRoom{room_id: room_id}}
+  end
+
+  def decode([], _), do: []
+
+  def decode([item], opts) do
+    with {:ok, item} <- decode(item, opts) do
+      {:ok, [item]}
+    end
+  end
+
+  def decode([head | rest], opts) do
+    with {:ok, rest} <- decode(rest, opts),
+         {:ok, head} <- decode(head, opts) do
+      {:ok, [head | rest]}
+    end
   end
 
   def decode(body, _opts) do
