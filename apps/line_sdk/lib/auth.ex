@@ -1,4 +1,4 @@
-defmodule LineSDK.Auth do
+defmodule LineSdk.Auth do
   @doc """
   Calculate x-line-signature for `message` with `channel_secret`
   """
