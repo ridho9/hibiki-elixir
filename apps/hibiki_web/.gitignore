@@ -19,8 +19,6 @@ erl_crash.dump
 # Also ignore archive artifacts (built via "mix archive.build").
 *.ez
 
-.elixir_ls
+# Ignore package tarball (built via "mix hex.build").
+hibiki_web-*.tar
 
-/config/*
-!/config/config.exs
-!/config/test.exs
