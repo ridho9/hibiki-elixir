@@ -14,8 +14,8 @@ config :hibiki_web,
   port: 8080
 
 config :hibiki,
-  channel_access_token: "",
-  channel_secret: ""
+  channel_access_token: nil,
+  channel_secret: nil
 
 #
 # and access this configuration in your application as:
