@@ -6,10 +6,15 @@ defmodule HibikiWeb.Application do
   use Application
 
   def start(_type, _args) do
+    port = Application.get_env(:hibiki_web, :port, 8080)
+
     children = [
       # Starts a worker by calling: HibikiWeb.Worker.start_link(arg)
       # {HibikiWeb.Worker, arg}
+      {Plug.Cowboy, scheme: :http, plug: HibikiWeb.Router, options: [port: port]}
     ]
+
+    IO.puts("Starting server at :#{port}")
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
