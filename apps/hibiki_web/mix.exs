@@ -9,7 +9,7 @@ defmodule HibikiWeb.MixProject do
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.9",
+      elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -29,11 +29,6 @@ defmodule HibikiWeb.MixProject do
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       # {:sibling_app_in_umbrella, in_umbrella: true}
-      {:raxx, "~> 1.1"},
-      {:ace, "~> 0.18.9"},
-      {:raxx_logger, "~> 0.2.2"},
-      {:hibiki, in_umbrella: true},
-      {:exsync, "~> 0.2", only: :dev}
     ]
   end
 end

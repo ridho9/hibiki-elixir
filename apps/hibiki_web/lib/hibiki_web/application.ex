@@ -9,8 +9,6 @@ defmodule HibikiWeb.Application do
     children = [
       # Starts a worker by calling: HibikiWeb.Worker.start_link(arg)
       # {HibikiWeb.Worker, arg}
-      {Ace.HTTP.Service,
-       [{HibikiWeb.Router, %{}}, [port: Application.get_env(:hibiki_web, :port), cleartext: true]]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
