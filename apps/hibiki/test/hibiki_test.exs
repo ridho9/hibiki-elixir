@@ -1,4 +1,4 @@
 defmodule HibikiTest do
   use ExUnit.Case
-  doctest Hibiki
+  # doctest Hibiki
 end

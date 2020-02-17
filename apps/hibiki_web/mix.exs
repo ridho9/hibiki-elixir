@@ -31,7 +31,8 @@ defmodule HibikiWeb.MixProject do
       # {:sibling_app_in_umbrella, in_umbrella: true}
       {:plug_cowboy, "~> 2.1"},
       {:exsync, "~> 0.2", only: :dev},
-      {:hibiki, in_umbrella: true}
+      {:hibiki, in_umbrella: true},
+      {:line_sdk, in_umbrella: true}
     ]
   end
 end
