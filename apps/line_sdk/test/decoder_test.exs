@@ -129,6 +129,35 @@ defmodule LineSdkTest.DecoderTest do
     assert LineSdk.Decoder.decode(input) == {:ok, expect}
   end
 
+  test "parse source room" do
+    input =
+      ~s(
+        {
+          "type": "room",
+          "roomId": "room_id",
+          "userId": "user_id"
+        }
+      )
+      |> Jason.decode!()
+
+    expect = %Model.SourceRoom{room_id: "room_id", user_id: "user_id"}
+    assert LineSdk.Decoder.decode(input) == {:ok, expect}
+  end
+
+  test "parse source room no user" do
+    input =
+      ~s(
+        {
+          "type": "room",
+          "roomId": "room_id"
+        }
+      )
+      |> Jason.decode!()
+
+    expect = %Model.SourceRoom{room_id: "room_id"}
+    assert LineSdk.Decoder.decode(input) == {:ok, expect}
+  end
+
   test "parse message event" do
     input =
       ~s(
@@ -171,6 +200,29 @@ defmodule LineSdkTest.DecoderTest do
       |> Jason.decode!()
 
     expect = %Model.TextMessage{text: "hello", id: "id"}
+    assert LineSdk.Decoder.decode(input) == {:ok, expect}
+  end
+
+  test "parse list" do
+    input =
+      ~s(
+        [{
+          "id": "id",
+          "type": "text",
+          "text": "hello"
+        },{
+          "id": "id",
+          "type": "text",
+          "text": "hello"
+        }]
+      )
+      |> Jason.decode!()
+
+    expect = [
+      %Model.TextMessage{text: "hello", id: "id"},
+      %Model.TextMessage{text: "hello", id: "id"}
+    ]
+
     assert LineSdk.Decoder.decode(input) == {:ok, expect}
   end
 end

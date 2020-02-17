@@ -5,4 +5,4 @@ config :hibiki_web,
 
 config :hibiki,
   channel_access_token: "cat",
-  channel_secret: "cs"
+  channel_secret: "secret"
