@@ -30,11 +30,11 @@ defmodule HibikiWeb.Plug.Hibiki do
 
   def process(%Plug.Conn{body_params: body} = conn, _opts) do
     with {:ok, body} <- LineSdk.Decoder.decode(body),
-         {:ok, _result} <- Hibiki.Handler.handle_webhook(body) do
-      IO.inspect(conn.body_params)
+         {:ok, result} <- Hibiki.Event.webhook_handle(body) do
+      IO.inspect(result)
 
       conn
-      |> send_resp(200, "Process")
+      |> send_resp(200, "Processed")
     else
       {:error, err} ->
         conn |> send_resp(500, "#{err}")

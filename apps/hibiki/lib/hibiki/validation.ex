@@ -3,7 +3,6 @@ defmodule Hibiki.Validation do
     signature_match =
       LineSdk.Auth.signature_match?(
         body,
-        Application.get_env(:hibiki, :channel_secret),
         signature
       )
 

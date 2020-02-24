@@ -7,7 +7,6 @@ defmodule Hibiki.ValidationText do
     signature = "uHVaInoJKUNRtT2I5yjlh0590mEZ+98eNBhQGXZcjrw="
 
     expect = {:ok, nil}
-
     assert Hibiki.Validation.validate_message(body, signature) == expect
   end
 
@@ -16,7 +15,6 @@ defmodule Hibiki.ValidationText do
     signature = "uHVaInoJKUNRtT2I5yjlh0590mEZ+98eNBhQGXZcj"
 
     expect = {:error, "invalid signature"}
-
     assert Hibiki.Validation.validate_message(body, signature) == expect
   end
 end
