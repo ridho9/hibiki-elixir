@@ -3,8 +3,4 @@ defmodule LineSdk.Model do
 
   @type message_object :: Model.TextMessage.t() | Model.ImageMessage.t()
   @type event :: Model.MessageEvent.t()
-
-  defmodule Source do
-    @type t :: Model.SourceUser.t() | Model.SourceGroup.t() | Model.SourceRoom.t()
-  end
 end
