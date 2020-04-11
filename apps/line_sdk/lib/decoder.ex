@@ -9,6 +9,12 @@ defmodule LineSdk.Decoder do
     end
   end
 
+  def decode(%{"events" => events}, opts) do
+    with {:ok, events} <- decode(events, opts) do
+      {:ok, %Model.WebhookEvent{events: events}}
+    end
+  end
+
   def decode(
         %{
           "type" => "message",
