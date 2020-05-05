@@ -13,7 +13,7 @@ import Config
 config :hibiki_web,
   port: 8080
 
-config :hibiki,
+config :line_sdk,
   channel_access_token: nil,
   channel_secret: nil
 
