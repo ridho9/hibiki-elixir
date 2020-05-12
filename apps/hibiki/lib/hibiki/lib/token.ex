@@ -1,4 +1,12 @@
 defmodule Hibiki.Lib.Token do
+  @spec tokenize(string :: String.t()) :: [String.t()]
+  def tokenize(""), do: []
+
+  def tokenize(string) do
+    {token, rest} = next_token(string)
+    [token | tokenize(rest)]
+  end
+
   @spec next_token(string :: String.t()) ::
           {token :: String.t(), rest :: String.t()}
   def next_token(""), do: {"", ""}
