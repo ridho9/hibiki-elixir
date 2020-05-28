@@ -2,11 +2,13 @@ defmodule Hibiki.Lib.Command.Registry do
   alias Hibiki.Command
   alias Hibiki.Lib
 
+  @spec all() :: [module()]
   def all,
     do: [
       Command.Call
     ]
 
+  @spec resolve_text(String.t()) :: {:ok, module(), String.t()} | {:error, String.t()}
   def resolve_text(text) do
     {name, rest} =
       Lib.Token.next_token(text)
