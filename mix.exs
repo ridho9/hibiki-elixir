@@ -17,7 +17,8 @@ defmodule HibikiElixir.MixProject do
   # Run "mix help deps" for examples and options.
   defp deps do
     [
-      {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 end
