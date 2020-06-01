@@ -6,6 +6,9 @@ defmodule Hibiki.Command.Call do
 
   @impl true
   def handle(_args) do
-    {:reply, %LineSdk.Model.TextMessage{text: "Hello calling"}}
+    {:reply,
+     %LineSdk.Model.TextMessage{
+       text: "Roger, Hibiki, heading out!\n\nI'll never forget Tenshi..."
+     }}
   end
 end
