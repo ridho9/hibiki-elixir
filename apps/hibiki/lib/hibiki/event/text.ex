@@ -3,7 +3,7 @@ defmodule Hibiki.Event.Text do
   defstruct text: ""
 end
 
-defimpl Hibiki.HandleableEvent, for: Hibiki.Event.Text do
+defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Text do
   def handle(%Hibiki.Event.Text{text: text}) do
     text = String.trim(text)
 

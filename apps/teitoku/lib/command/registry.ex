@@ -1,12 +1,11 @@
-defmodule Hibiki.Lib.Command.Registry do
-  alias Hibiki.Command
-  alias Hibiki.Token
+defmodule Teitoku.Command.Registry do
+  @registry Application.get_env(:teitoku, :registry)
+
+  alias Teitoku.Token
 
   @spec all() :: [module()]
   def all,
-    do: [
-      Command.Call
-    ]
+    do: @registry.all()
 
   @spec resolve_text(String.t()) :: {:ok, module(), String.t()} | {:error, String.t()}
   def resolve_text(text) do

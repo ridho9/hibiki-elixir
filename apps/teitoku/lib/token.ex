@@ -1,4 +1,4 @@
-defmodule Hibiki.Token do
+defmodule Teitoku.Token do
   @spec tokenize(string :: String.t()) :: [String.t()]
   def tokenize(""), do: []
 

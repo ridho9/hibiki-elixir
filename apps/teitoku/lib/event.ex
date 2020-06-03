@@ -1,5 +1,5 @@
-defmodule Hibiki.Event do
-  @type t :: Hibiki.Event.Text.t() | Hibiki.Event.Command.t()
+defmodule Teitoku.Event do
+  @converter Application.get_env(:teitoku, :converter)
 
   @typedoc """
   - `{:ok, any}` don't do anything
@@ -16,20 +16,11 @@ defmodule Hibiki.Event do
           | {:error, String.t()}
           | {:ignore, any}
 
-  @spec convert_event(any) :: {:ok, Hibiki.Event.t()} | {:error, any}
-  def convert_event(%LineSdk.Model.MessageEvent{message: %LineSdk.Model.TextMessage{text: text}}) do
-    {:ok, %Hibiki.Event.Text{text: text}}
-  end
-
-  def convert_event(event) do
-    {:error, event}
-  end
-
   @spec webhook_handle(LineSdk.Model.WebhookEvent.t()) :: any
   def webhook_handle(%LineSdk.Model.WebhookEvent{events: events}) do
     converted =
       events
-      |> Enum.map(&Hibiki.Event.process_event/1)
+      |> Enum.map(&Teitoku.Event.process_event/1)
 
     {:ok, converted}
   end
@@ -39,14 +30,14 @@ defmodule Hibiki.Event do
     reply_token = Map.get(event, :reply_token)
 
     event
-    |> convert_event()
+    |> @converter.convert_event()
     |> process_single_event(reply_token)
   end
 
   def process_single_event(event, reply_token) do
     event
     |> case do
-      {:ok, event} -> Hibiki.HandleableEvent.handle(event)
+      {:ok, event} -> Teitoku.HandleableEvent.handle(event)
       {:error, error} -> {:ignore, error}
     end
     |> IO.inspect()
@@ -71,13 +62,13 @@ defmodule Hibiki.Event do
   end
 end
 
-defprotocol Hibiki.HandleableEvent do
-  @spec handle(Hibiki.Event.t()) :: Hibiki.Event.result()
+defprotocol Teitoku.HandleableEvent do
+  @spec handle(any) :: Teitoku.Event.result()
   @fallback_to_any true
   def handle(event)
 end
 
-defimpl Hibiki.HandleableEvent, for: Any do
+defimpl Teitoku.HandleableEvent, for: Any do
   def handle(event) do
     {:ignore, "can't handle event #{inspect(event)}"}
   end

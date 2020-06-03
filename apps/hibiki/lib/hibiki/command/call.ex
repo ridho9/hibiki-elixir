@@ -1,5 +1,5 @@
 defmodule Hibiki.Command.Call do
-  @behaviour Hibiki.Command
+  @behaviour Teitoku.Command
 
   @impl true
   def name, do: "call"

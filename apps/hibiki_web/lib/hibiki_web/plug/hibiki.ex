@@ -18,7 +18,7 @@ defmodule HibikiWeb.Plug.Hibiki do
         _opts
       ) do
     with {:ok, signature} <- get_signature(conn),
-         {:ok, _} <- Hibiki.Validation.validate_message(raw_body, signature) do
+         {:ok, _} <- Teitoku.Validation.validate_message(raw_body, signature) do
       conn
     else
       {:error, err} ->
@@ -30,7 +30,7 @@ defmodule HibikiWeb.Plug.Hibiki do
 
   def process(%Plug.Conn{body_params: body} = conn, _opts) do
     with {:ok, body} <- LineSdk.Decoder.decode(body),
-         {:ok, result} <- Hibiki.Event.webhook_handle(body) do
+         {:ok, result} <- Teitoku.Event.webhook_handle(body) do
       IO.inspect(result)
 
       conn

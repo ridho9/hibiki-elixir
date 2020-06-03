@@ -1,4 +1,4 @@
-defmodule Hibiki.Validation do
+defmodule Teitoku.Validation do
   def validate_message(body, signature) do
     signature_match =
       LineSdk.Auth.signature_match?(
