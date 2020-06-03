@@ -11,7 +11,7 @@ defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Command do
     |> String.trim_leading()
     |> Teitoku.Command.Registry.resolve_text(Hibiki.Registry)
     |> case do
-      {:ok, command, args} -> command.handle(args)
+      {:ok, command, args} -> command.handle(args, nil)
       {:error, msg} -> {:reply_error, msg}
     end
   end

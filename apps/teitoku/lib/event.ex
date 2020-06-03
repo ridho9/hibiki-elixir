@@ -23,13 +23,13 @@ defmodule Teitoku.Event do
 
         event
         |> converter.convert_event()
-        |> process_single_event(reply_token)
+        |> process_event(reply_token)
       end)
 
     {:ok, converted}
   end
 
-  def process_single_event(event, reply_token) do
+  def process_event(event, reply_token) do
     event
     |> case do
       {:ok, event} -> Teitoku.HandleableEvent.handle(event)
@@ -52,7 +52,7 @@ defmodule Teitoku.Event do
         nil
 
       {:continue, event} ->
-        process_single_event({:ok, event}, reply_token)
+        process_event({:ok, event}, reply_token)
     end
   end
 end
