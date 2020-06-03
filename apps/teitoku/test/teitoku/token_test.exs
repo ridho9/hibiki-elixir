@@ -1,7 +1,7 @@
-defmodule Hibiki.Lib.TokenTest do
+defmodule Teitoku.Lib.TokenTest do
   use ExUnit.Case
-  alias Hibiki.Token
-  doctest Hibiki.Token
+  alias Teitoku.Token
+  doctest Teitoku.Token
 
   test "next token empty string" do
     string = ""
