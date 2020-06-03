@@ -9,7 +9,7 @@ defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Command do
     text
     |> String.slice(1..-1)
     |> String.trim_leading()
-    |> Teitoku.Command.Registry.resolve_text()
+    |> Teitoku.Command.Registry.resolve_text(Hibiki.Registry)
     |> case do
       {:ok, command, args} -> command.handle(args)
       {:error, msg} -> {:reply_error, msg}

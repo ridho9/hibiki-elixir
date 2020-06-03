@@ -1,4 +1,4 @@
-defmodule Teitoku.Lib.TokenTest do
+defmodule Teitoku.TokenTest do
   use ExUnit.Case
   alias Teitoku.Token
   doctest Teitoku.Token

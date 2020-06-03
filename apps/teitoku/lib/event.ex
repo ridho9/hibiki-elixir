@@ -1,6 +1,4 @@
 defmodule Teitoku.Event do
-  @converter Application.get_env(:teitoku, :converter)
-
   @typedoc """
   - `{:ok, any}` don't do anything
   - `{:reply, message}` to reply with a successful message.
@@ -16,22 +14,19 @@ defmodule Teitoku.Event do
           | {:error, String.t()}
           | {:ignore, any}
 
-  @spec webhook_handle(LineSdk.Model.WebhookEvent.t()) :: any
-  def webhook_handle(%LineSdk.Model.WebhookEvent{events: events}) do
+  @spec handle(LineSdk.Model.WebhookEvent.t(), module()) :: any
+  def handle(%LineSdk.Model.WebhookEvent{events: events}, converter) do
     converted =
       events
-      |> Enum.map(&Teitoku.Event.process_event/1)
+      |> Enum.map(fn event ->
+        reply_token = Map.get(event, :reply_token)
+
+        event
+        |> converter.convert_event()
+        |> process_single_event(reply_token)
+      end)
 
     {:ok, converted}
-  end
-
-  @spec process_event(LineSdk.Model.message_object()) :: any
-  def process_event(event) do
-    reply_token = Map.get(event, :reply_token)
-
-    event
-    |> @converter.convert_event()
-    |> process_single_event(reply_token)
   end
 
   def process_single_event(event, reply_token) do

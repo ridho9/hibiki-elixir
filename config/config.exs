@@ -17,10 +17,6 @@ config :line_sdk,
   channel_access_token: nil,
   channel_secret: nil
 
-config :teitoku,
-  converter: nil,
-  registry: nil
-
 #
 # and access this configuration in your application as:
 #

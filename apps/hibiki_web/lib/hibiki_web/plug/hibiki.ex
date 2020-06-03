@@ -30,7 +30,7 @@ defmodule HibikiWeb.Plug.Hibiki do
 
   def process(%Plug.Conn{body_params: body} = conn, _opts) do
     with {:ok, body} <- LineSdk.Decoder.decode(body),
-         {:ok, result} <- Teitoku.Event.webhook_handle(body) do
+         {:ok, result} <- Teitoku.Event.handle(body, Hibiki.Converter) do
       IO.inspect(result)
 
       conn
