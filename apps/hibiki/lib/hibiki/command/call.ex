@@ -1,10 +1,12 @@
 defmodule Hibiki.Command.Call do
+  alias Teitoku.Command.Options
+
   @behaviour Teitoku.Command
 
-  @impl true
   def name, do: "call"
 
-  @impl true
+  def options, do: %Options{}
+
   def handle(_args, _ctx) do
     {:reply,
      %LineSdk.Model.TextMessage{
