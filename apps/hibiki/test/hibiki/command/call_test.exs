@@ -12,6 +12,6 @@ defmodule Hibiki.Command.CallTest do
          text: "Roger, Hibiki, heading out!\n\nI'll never forget Tenshi..."
        }}
 
-    assert Call.handle(args) == expect
+    assert Call.handle(args, nil) == expect
   end
 end

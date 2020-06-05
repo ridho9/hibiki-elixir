@@ -5,9 +5,12 @@ defmodule Hibiki.Command.Calc do
 
   def name, do: "calc"
 
-  def options, do: %Options{}
+  def options,
+    do:
+      %Options{}
+      |> Options.add_named("query")
 
-  def handle(query, _ctx) do
+  def handle(%{"query" => query}, _ctx) do
     case Hibiki.Calc.calculate(query) do
       {:ok, %{"out" => out}} ->
         {:reply,

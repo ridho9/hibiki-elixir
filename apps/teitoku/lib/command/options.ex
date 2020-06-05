@@ -4,7 +4,7 @@ defmodule Teitoku.Command.Options do
   @type t :: %__MODULE__{named: list()}
   defstruct named: []
 
-  @spec add_named(Options.t(), atom()) :: Options.t()
+  @spec add_named(Options.t(), String.t()) :: Options.t()
   def add_named(%__MODULE__{named: named} = options, name) do
     named = named ++ [name]
 

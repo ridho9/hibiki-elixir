@@ -41,7 +41,7 @@ defmodule Teitoku.Event do
         LineSdk.Client.send_reply(message, reply_token)
 
       {:reply_error, err} ->
-        %LineSdk.Model.TextMessage{text: "Error happened: #{err}"}
+        %LineSdk.Model.TextMessage{text: "Error: #{err}"}
         |> LineSdk.Client.send_reply(reply_token)
 
       {:error, err} ->
