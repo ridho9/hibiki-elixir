@@ -17,7 +17,7 @@ defmodule Teitoku.Token do
     cond do
       String.at(string, 0) in [~s("), ~s('), ~s(`)] ->
         q = String.at(string, 0)
-        pattern = ~r/^#{q}(.*)#{q}\s*(.*)/s
+        pattern = ~r/^#{q}(.*?)#{q}\s*(.*)/s
 
         [token, rest] = Regex.run(pattern, string, capture: :all_but_first)
         {token, rest}

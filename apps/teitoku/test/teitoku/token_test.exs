@@ -50,4 +50,10 @@ defmodule Teitoku.TokenTest do
     expect = {~s(aaa), ~s(bbb)}
     assert Token.next_token(string) == expect
   end
+
+  test "test 1" do
+    string = ~s("aaa" "bbb")
+    expect = {~s(aaa), ~s("bbb")}
+    assert Token.next_token(string) == expect
+  end
 end
