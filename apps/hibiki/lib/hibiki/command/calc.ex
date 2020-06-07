@@ -1,7 +1,6 @@
 defmodule Hibiki.Command.Calc do
+  use Teitoku.Command
   alias Teitoku.Command.Options
-
-  @behaviour Teitoku.Command
 
   def name, do: "calc"
 

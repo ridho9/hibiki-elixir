@@ -1,11 +1,7 @@
 defmodule Hibiki.Command.Call do
-  alias Teitoku.Command.Options
-
-  @behaviour Teitoku.Command
+  use Teitoku.Command
 
   def name, do: "call"
-
-  def options, do: %Options{}
 
   def handle(_args, _ctx) do
     {:reply,
