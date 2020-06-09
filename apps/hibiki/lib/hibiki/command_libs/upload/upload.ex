@@ -1,6 +1,5 @@
 defmodule Hibiki.Upload do
   alias Hibiki.Upload.Provider.Catbox
-  alias Hibiki.Upload
 
   @spec upload_binary(module, binary) :: {:ok, String.t()} | {:error, any}
   def upload_binary(provider, binary) do
