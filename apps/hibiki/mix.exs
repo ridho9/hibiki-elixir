@@ -31,6 +31,7 @@ defmodule Hibiki.MixProject do
       # {:sibling_app_in_umbrella, in_umbrella: true}
       {:httpoison, "~> 1.6"},
       {:jason, "~> 1.1"},
+      {:temp, "~> 0.4.7"},
       {:line_sdk, in_umbrella: true},
       {:teitoku, in_umbrella: true}
     ]
