@@ -8,3 +8,13 @@ defmodule LineSdk.Model.ImageMessage do
           preview_url: String.t() | nil
         }
 end
+
+defimpl LineSdk.MessageObject, for: LineSdk.Model.ImageMessage do
+  def to_object(%LineSdk.Model.ImageMessage{original_url: orig, preview_url: prev}) do
+    %{
+      "type" => "image",
+      "originalContentUrl" => orig,
+      "previewImageUrl" => prev
+    }
+  end
+end
