@@ -69,4 +69,50 @@ defmodule Teitoku.Command.ParserTest do
 
     assert result == expect
   end
+
+  test "parse flag 1" do
+    input = ""
+
+    options =
+      %Options{}
+      |> Options.add_flag("flag1")
+
+    expect = {:ok, %{"flag1" => false}}
+    assert Parser.parse(input, options) == expect
+  end
+
+  test "parse flag 2" do
+    input = "-flag1"
+
+    options =
+      %Options{}
+      |> Options.add_flag("flag1")
+
+    expect = {:ok, %{"flag1" => true}}
+    assert Parser.parse(input, options) == expect
+  end
+
+  test "parse 6" do
+    input = "-flag1 aaaa"
+
+    options =
+      %Options{}
+      |> Options.add_flag("flag1")
+      |> Options.add_named("arg1")
+
+    expect = {:ok, %{"flag1" => true, "arg1" => "aaaa"}}
+    assert Parser.parse(input, options) == expect
+  end
+
+  test "parse 7" do
+    input = "aaaa"
+
+    options =
+      %Options{}
+      |> Options.add_flag("flag1")
+      |> Options.add_named("arg1")
+
+    expect = {:ok, %{"flag1" => false, "arg1" => "aaaa"}}
+    assert Parser.parse(input, options) == expect
+  end
 end
