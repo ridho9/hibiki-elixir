@@ -44,7 +44,7 @@ defmodule Teitoku.Event do
         %LineSdk.Model.TextMessage{text: "Error: #{err}"}
         |> LineSdk.Client.send_reply(reply_token)
 
-      {:error, err} ->
+      {:error, _err} ->
         # TODO: Implement proper error logging
         nil
 
