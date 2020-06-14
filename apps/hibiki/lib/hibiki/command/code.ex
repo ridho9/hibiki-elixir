@@ -4,7 +4,7 @@ defmodule Hibiki.Command.Code do
 
   def name, do: "code"
 
-  def description, do: "THE NUMBERS, WHAT IT MEANS"
+  def description, do: "THE NUMBERS WHAT IT MEANS"
 
   def private, do: true
 
