@@ -16,6 +16,7 @@ defmodule Hibiki.Command.Help do
   def handle(%{"query" => ""}, _ctx) do
     all_command =
       Hibiki.Registry.all()
+      |> Enum.filter(fn x -> x.private == false end)
       |> Enum.map(fn x -> x.name end)
       |> Enum.sort()
       |> Enum.join(", ")
