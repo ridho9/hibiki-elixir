@@ -115,4 +115,29 @@ defmodule Teitoku.Command.ParserTest do
     expect = {:ok, %{"flag1" => false, "arg1" => "aaaa"}}
     assert Parser.parse(input, options) == expect
   end
+
+  test "parse allow empty 1" do
+    input = ""
+
+    options =
+      %Options{}
+      |> Options.add_named("arg1")
+      |> Options.allow_empty()
+
+    expect = {:ok, %{"arg1" => ""}}
+    assert Parser.parse(input, options) == expect
+  end
+
+  test "parse allow empty 2" do
+    input = "aaaa"
+
+    options =
+      %Options{}
+      |> Options.add_named("arg1")
+      |> Options.add_named("arg2")
+      |> Options.allow_empty()
+
+    expect = {:ok, %{"arg1" => "aaaa", "arg2" => ""}}
+    assert Parser.parse(input, options) == expect
+  end
 end

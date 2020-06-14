@@ -16,4 +16,11 @@ defmodule Teitoku.Command.OptionsTest do
     expect = %Options{flag: ["flag"]}
     assert input == expect
   end
+
+  test "allow empty" do
+    input = %Options{} |> Options.allow_empty()
+
+    expect = %Options{allow_empty: true}
+    assert input == expect
+  end
 end

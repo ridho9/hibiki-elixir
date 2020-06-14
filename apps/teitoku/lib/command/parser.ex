@@ -7,19 +7,25 @@ defmodule Teitoku.Command.Parser do
     with {:ok, result} <- parse_inner(String.trim(text), options) do
       result_keys = Map.keys(result)
 
-      {:ok,
-       Enum.reduce(options.flag, result, fn flag, map ->
-         if flag not in result_keys do
-           Map.put(map, flag, false)
-         else
-           map
-         end
-       end)}
+      result_opt =
+        Enum.reduce(options.flag, result, fn flag, map ->
+          if flag not in result_keys do
+            Map.put(map, flag, false)
+          else
+            map
+          end
+        end)
+
+      {:ok, result_opt}
     end
   end
 
   def parse_inner("", %Options{named: []}) do
     {:ok, %{}}
+  end
+
+  def parse_inner("", %Options{named: [arg], allow_empty: true}) do
+    {:ok, %{arg => ""}}
   end
 
   def parse_inner("", %Options{named: [arg]}) do
