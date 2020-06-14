@@ -5,6 +5,7 @@ defmodule Hibiki.Registry do
     do: [
       Cmd.Call,
       Cmd.Calc,
-      Cmd.Chs
+      Cmd.Chs,
+      Cmd.Help
     ]
 end
