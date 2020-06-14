@@ -31,8 +31,6 @@ defmodule HibikiWeb.Plug.Hibiki do
   def process(%Plug.Conn{body_params: body} = conn, _opts) do
     with {:ok, body} <- LineSdk.Decoder.decode(body),
          {:ok, _result} <- Teitoku.Event.handle(body, Hibiki.Converter) do
-      # IO.inspect(result)
-
       conn
       |> send_resp(200, "Processed")
     else

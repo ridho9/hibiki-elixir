@@ -13,6 +13,7 @@ defmodule Teitoku.Event do
           | {:reply_error, String.t()}
           | {:error, String.t()}
           | {:ignore, any}
+          | {:continue, any}
 
   @spec handle(LineSdk.Model.WebhookEvent.t(), module()) :: any
   def handle(%LineSdk.Model.WebhookEvent{events: events}, converter) do
@@ -35,7 +36,6 @@ defmodule Teitoku.Event do
       {:ok, event} -> Teitoku.HandleableEvent.handle(event)
       {:error, error} -> {:ignore, error}
     end
-    |> IO.inspect()
     |> case do
       {:reply, message} ->
         LineSdk.Client.send_reply(message, reply_token)
@@ -46,7 +46,7 @@ defmodule Teitoku.Event do
 
       {:error, err} ->
         # TODO: Implement proper error logging
-        IO.inspect(err)
+        nil
 
       {:ignore, _} ->
         nil

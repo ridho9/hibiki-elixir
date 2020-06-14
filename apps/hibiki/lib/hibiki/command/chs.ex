@@ -10,7 +10,6 @@ defmodule Hibiki.Command.Chs do
     select =
       choice
       |> Teitoku.Token.tokenize()
-      |> IO.inspect()
       |> Enum.random()
 
     {:reply,
