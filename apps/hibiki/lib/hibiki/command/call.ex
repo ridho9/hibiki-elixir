@@ -3,6 +3,8 @@ defmodule Hibiki.Command.Call do
 
   def name, do: "call"
 
+  def description, do: "A simple call"
+
   def handle(_args, _ctx) do
     {:reply,
      %LineSdk.Model.TextMessage{

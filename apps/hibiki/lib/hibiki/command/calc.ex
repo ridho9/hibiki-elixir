@@ -4,11 +4,13 @@ defmodule Hibiki.Command.Calc do
 
   def name, do: "calc"
 
+  def description, do: "Calculate query, powered by https://web2.0calc.com/"
+
   def options,
     do:
       %Options{}
-      |> Options.add_flag("i")
-      |> Options.add_named("query")
+      |> Options.add_flag("i", desc: "Return result as image")
+      |> Options.add_named("query", desc: "Equation to calculate")
 
   def handle(%{"query" => query, "i" => image}, _ctx) do
     case Hibiki.Calc.calculate(query) do

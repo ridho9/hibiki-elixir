@@ -4,7 +4,12 @@ defmodule Hibiki.Command.Chs do
 
   def name, do: "chs"
 
-  def options, do: %Options{} |> Options.add_named("choice")
+  def description, do: "Choose!"
+
+  def options,
+    do:
+      %Options{}
+      |> Options.add_named("choice", desc: "Choices to select from, separated by space")
 
   def handle(%{"choice" => choice}, _ctx) do
     select =
