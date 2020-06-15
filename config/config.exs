@@ -5,6 +5,9 @@ import Config
 config :hibiki,
   ecto_repos: [Hibiki.Repo]
 
+config :hibiki,
+  admin_id: []
+
 config :hibiki, Hibiki.Repo,
   database: "hibiki_repo",
   username: "user",

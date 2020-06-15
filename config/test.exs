@@ -1,5 +1,8 @@
 import Config
 
+config :hibiki,
+  admin_id: ["Uf013e46b99285f29439f42bd5170992a"]
+
 config :hibiki_web,
   port: 8080
 
