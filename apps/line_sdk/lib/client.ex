@@ -14,6 +14,13 @@ defmodule LineSdk.Client do
     })
   end
 
+  def get_content(message_id) do
+    with {:ok, %HTTPoison.Response{body: body, status_code: 200}} <-
+           get("/bot/message/#{message_id}/content") do
+      {:ok, body}
+    end
+  end
+
   def get(url) do
     headers = [
       {"Authorization", "Bearer #{LineSdk.Config.channel_access_token()}"}
