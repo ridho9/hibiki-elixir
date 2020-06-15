@@ -32,6 +32,8 @@ defmodule Hibiki.MixProject do
       {:httpoison, "~> 1.6"},
       {:jason, "~> 1.1"},
       {:temp, "~> 0.4.7"},
+      {:ecto_sql, "~> 3.0"},
+      {:postgrex, ">= 0.0.0"},
       {:line_sdk, in_umbrella: true},
       {:teitoku, in_umbrella: true}
     ]
