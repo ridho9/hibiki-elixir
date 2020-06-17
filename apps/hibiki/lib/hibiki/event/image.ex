@@ -4,10 +4,13 @@ defmodule Hibiki.Event.Image do
 end
 
 defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Image do
-  def handle(%Hibiki.Event.Image{id: id}) do
-    {:reply,
-     %LineSdk.Model.TextMessage{
-       text: "image id #{id}"
-     }}
+  @spec handle(any) :: Teitoku.Event.result()
+  def handle(%Hibiki.Event.Image{id: _id}) do
+    # {:reply,
+    #  %LineSdk.Model.TextMessage{
+    #    text: "image id #{id}"
+    #  }}
+
+    {:ignore, nil}
   end
 end

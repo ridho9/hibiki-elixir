@@ -23,7 +23,7 @@ defmodule Teitoku.Event do
         reply_token = Map.get(event, :reply_token)
 
         event
-        |> converter.convert_event()
+        |> converter.convert()
         |> process_event(reply_token)
       end)
 
