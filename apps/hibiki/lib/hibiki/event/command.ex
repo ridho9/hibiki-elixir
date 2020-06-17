@@ -4,15 +4,18 @@ defmodule Hibiki.Event.Command do
 end
 
 defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Command do
-  def handle(%Hibiki.Event.Command{text: text}) do
+  def handle(%Hibiki.Event.Command{text: text}, ctx) do
     # start parsing and defining command here
     text
     |> String.slice(1..-1)
     |> String.trim_leading()
     |> Teitoku.Command.Registry.prepare(Hibiki.Registry)
     |> case do
-      {:ok, command, args} -> command.handle(args, nil)
-      {:error, msg} -> {:reply_error, msg}
+      {:ok, command, args} ->
+        Teitoku.Command.handle(command, args, ctx)
+
+      {:error, msg} ->
+        {:reply_error, msg}
     end
   end
 end

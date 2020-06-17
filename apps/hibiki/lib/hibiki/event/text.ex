@@ -4,7 +4,7 @@ defmodule Hibiki.Event.Text do
 end
 
 defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Text do
-  def handle(%Hibiki.Event.Text{text: text}) do
+  def handle(%Hibiki.Event.Text{text: text}, _ctx) do
     text = String.trim(text)
 
     cond do

@@ -30,12 +30,12 @@ defmodule Teitoku.Event do
     {:ok, converted}
   end
 
-  def process_event(event, reply_token) do
-    event
-    |> case do
-      {:ok, event} -> Teitoku.HandleableEvent.handle(event)
-      {:error, error} -> {:ignore, error}
-    end
+  def process_event({:error, err}, _) do
+    {:ignore, err}
+  end
+
+  def process_event({:ok, event, ctx}, reply_token) do
+    Teitoku.HandleableEvent.handle(event, ctx)
     |> case do
       {:reply, message} ->
         LineSdk.Client.send_reply(message, reply_token)
@@ -52,19 +52,20 @@ defmodule Teitoku.Event do
         nil
 
       {:continue, event} ->
-        process_event({:ok, event}, reply_token)
+        process_event({:ok, event, ctx}, reply_token)
     end
   end
 end
 
 defprotocol Teitoku.HandleableEvent do
-  @spec handle(any) :: Teitoku.Event.result()
+  @spec handle(any, map) :: Teitoku.Event.result()
+  def handle(event, ctx)
+
   @fallback_to_any true
-  def handle(event)
 end
 
 defimpl Teitoku.HandleableEvent, for: Any do
-  def handle(event) do
+  def handle(event, _ctx) do
     {:ignore, "can't handle event #{inspect(event)}"}
   end
 end

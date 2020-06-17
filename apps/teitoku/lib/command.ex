@@ -6,6 +6,10 @@ defmodule Teitoku.Command do
 
   @callback handle(Teitoku.Command.Options.t(), any) :: Teitoku.Event.result()
 
+  def handle(command, args, ctx) do
+    command.handle(args, ctx)
+  end
+
   defmacro __using__(_opts) do
     quote do
       @behaviour Teitoku.Command
