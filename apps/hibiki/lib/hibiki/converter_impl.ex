@@ -1,7 +1,7 @@
 defimpl Hibiki.Convertable, for: LineSdk.Model.MessageEvent do
-  def convert(%LineSdk.Model.MessageEvent{message: message, source: source} = event, ctx) do
+  def convert(%LineSdk.Model.MessageEvent{message: message, source: source}, ctx) do
     ctx =
-      Map.put(ctx, :event, event)
+      ctx
       |> Map.put(:source, source)
 
     Hibiki.Convertable.convert(message, ctx)
