@@ -9,8 +9,9 @@ defmodule Hibiki.Application do
     children = [
       # Starts a worker by calling: Hibiki.Worker.start_link(arg)
       # {Hibiki.Worker, arg}
-      {Hibiki.Repo, []},
-      {Hibiki.Cache, name: Hibiki.Cache}
+      {Hibiki.Entity.Data, name: Hibiki.Entity.Data},
+      {Hibiki.Cache, name: Hibiki.Cache},
+      {Hibiki.Repo, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -39,10 +39,10 @@ defmodule Hibiki.Cache do
     end
   end
 
-  def terminate(_reason, {table}) do
-    Logger.info("Terminating Hibiki.Cache")
-    :dets.close(table)
-  end
+  # def terminate(_reason, {table}) do
+  #   Logger.info("Terminating Hibiki.Cache")
+  #   :dets.close(table)
+  # end
 end
 
 defmodule Hibiki.Cache.Key do
