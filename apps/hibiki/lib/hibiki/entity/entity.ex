@@ -25,7 +25,8 @@ defmodule Hibiki.Entity do
     |> cast(params, [:line_id, :type])
     |> validate_required([:line_id, :type])
     |> validate_inclusion(:type, ["global", "user", "group", "room"])
-    |> unique_constraint(:line_id, name: :entities_line_id_index)
+    |> unique_constraint(:line_id)
+    |> unique_constraint(:id)
   end
 
   def global() do
