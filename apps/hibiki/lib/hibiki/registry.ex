@@ -9,6 +9,7 @@ defmodule Hibiki.Registry do
       Cmd.Help,
       Cmd.Case,
       Cmd.Info,
+      Cmd.Upload,
       Cmd.Code
     ]
 end
