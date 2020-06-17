@@ -3,6 +3,7 @@ defmodule Hibiki.Entity do
 
   import Ecto.Changeset
   alias Hibiki.Repo
+  alias Hibiki.Entity
 
   schema "entities" do
     field(:line_id, :string)
@@ -31,13 +32,13 @@ defmodule Hibiki.Entity do
     get("global")
   end
 
-  @spec get(String.t()) :: t | nil
+  @spec get(String.t()) :: Entity.t() | nil
   def get(line_id) do
     Hibiki.Entity
     |> Repo.get_by(line_id: line_id)
   end
 
-  @spec create_or_get(String.t(), String.t()) :: t
+  @spec create_or_get(String.t(), String.t()) :: Entity.t()
   def create_or_get(line_id, type) do
     case get(line_id) do
       nil ->
@@ -63,5 +64,25 @@ defmodule Hibiki.Entity do
   @spec admin?(t) :: boolean
   def admin?(entity) do
     entity.line_id in Application.get_env(:hibiki, :admin_id)
+  end
+
+  @spec from_source(LineSdk.Model.Source.t()) :: Entity.t()
+  def from_source(source)
+
+  def from_source(%LineSdk.Model.SourceUser{user_id: line_id}) do
+    create_or_get(line_id, "user")
+  end
+
+  def from_source(%LineSdk.Model.SourceGroup{group_id: line_id}) do
+    create_or_get(line_id, "group")
+  end
+
+  def from_source(%LineSdk.Model.SourceRoom{room_id: line_id}) do
+    create_or_get(line_id, "room")
+  end
+
+  @spec user_from_source(LineSdk.Model.Source.t()) :: Entity.t()
+  def user_from_source(%{user_id: line_id}) do
+    create_or_get(line_id, "user")
   end
 end
