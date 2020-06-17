@@ -15,7 +15,7 @@ defimpl Hibiki.Convertable, for: LineSdk.Model.TextMessage do
 end
 
 defimpl Hibiki.Convertable, for: LineSdk.Model.ImageMessage do
-  def convert(%LineSdk.Model.ImageMessage{id: id}, _ctx) do
-    {:error, id}
+  def convert(%LineSdk.Model.ImageMessage{id: id}, ctx) do
+    {:ok, %Hibiki.Event.Image{id: id}, ctx}
   end
 end
