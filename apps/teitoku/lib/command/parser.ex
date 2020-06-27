@@ -28,7 +28,7 @@ defmodule Teitoku.Command.Parser do
     {:ok, %{arg => ""}}
   end
 
-  def parse_inner("", %Options{named: [arg]}) do
+  def parse_inner("", %Options{named: [arg | _]}) do
     {:error, "missing argument '#{arg}'"}
   end
 
@@ -44,6 +44,9 @@ defmodule Teitoku.Command.Parser do
       end
     else
       case opt.named do
+        [] ->
+          {:ok, %{}}
+
         [arg] ->
           result = %{arg => String.trim(text)}
           {:ok, result}
