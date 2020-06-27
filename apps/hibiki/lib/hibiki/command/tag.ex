@@ -36,4 +36,9 @@ defmodule Hibiki.Command.Tag do
         {:reply, msg}
     end
   end
+
+  def subcommands,
+    do: [
+      Hibiki.Command.Tag.Create
+    ]
 end

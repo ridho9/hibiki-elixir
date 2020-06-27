@@ -1,7 +1,7 @@
 defmodule Hibiki.Registry do
   alias Hibiki.Command, as: Cmd
 
-  def all,
+  def subcommands,
     do: [
       Cmd.Call,
       Cmd.Calc,
