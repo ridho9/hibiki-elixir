@@ -9,7 +9,7 @@ defmodule Hibiki.Command.Upload do
   def description, do: "Upload last sent image from this scope to catbox"
 
   def handle(_args, %{source: source}) do
-    Entity.from_source(source)
+    source
     |> Entity.Data.get(Entity.Data.Key.last_image_id())
     |> case do
       nil ->
