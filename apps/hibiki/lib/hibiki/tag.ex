@@ -2,13 +2,16 @@ defmodule Hibiki.Tag do
   use Ecto.Schema
   import Ecto.Query
 
+  alias Hibiki.Entity
+  alias Hibiki.Tag
+
   schema "tags" do
     field(:name, :string)
     field(:type, :string)
     field(:value, :string)
 
-    belongs_to(:creator, Hibiki.Entity, foreign_key: :creator_id)
-    belongs_to(:scope, Hibiki.Entity, foreign_key: :scope_id)
+    belongs_to(:creator, Entity, foreign_key: :creator_id)
+    belongs_to(:scope, Entity, foreign_key: :scope_id)
 
     timestamps()
   end
@@ -44,68 +47,68 @@ defmodule Hibiki.Tag do
     |> Enum.join(", ")
   end
 
-  @spec create(String.t(), String.t(), String.t(), Hibiki.Entity.t(), Hibiki.Entity.t()) ::
-          {:ok, Hibiki.Tag.t()} | {:error, any}
+  @spec create(String.t(), String.t(), String.t(), Entity.t(), Entity.t()) ::
+          {:ok, Tag.t()} | {:error, any}
   def create(name, type, value, creator, scope) do
-    %Hibiki.Tag{creator: creator, scope: scope}
-    |> Hibiki.Tag.changeset(%{name: name, type: type, value: value})
+    %Tag{creator: creator, scope: scope}
+    |> Tag.changeset(%{name: name, type: type, value: value})
     |> Hibiki.Repo.insert()
   end
 
-  @spec delete(Hibiki.Tag.t()) :: {:ok, Hibiki.Tag.t()} | {:error, any}
+  @spec delete(Tag.t()) :: {:ok, Tag.t()} | {:error, any}
   def delete(tag) do
     tag
     |> Hibiki.Repo.delete()
   end
 
-  @spec update(Hibiki.Tag.t(), map) :: {:ok, Hibiki.Tag.t()} | {:error, any}
+  @spec update(Tag.t(), map) :: {:ok, Tag.t()} | {:error, any}
   def update(tag, changes) do
     tag
-    |> Hibiki.Tag.changeset(changes)
+    |> Tag.changeset(changes)
     |> Hibiki.Repo.update()
   end
 
-  @spec get_by_creator(Hibiki.Entity.t()) :: [Hibiki.Tag.t()]
+  @spec get_by_creator(Entity.t()) :: [Tag.t()]
   def get_by_creator(creator) do
-    from(t in Hibiki.Tag,
+    from(t in Tag,
       where: t.creator_id == ^creator.id
     )
     |> Hibiki.Repo.all()
   end
 
-  @spec get_by_scope(Hibiki.Entity.t()) :: [Hibiki.Tag.t()]
+  @spec get_by_scope(Entity.t()) :: [Tag.t()]
   def get_by_scope(scope) do
-    from(t in Hibiki.Tag,
+    from(t in Tag,
       where: t.scope_id == ^scope.id
     )
     |> Hibiki.Repo.all()
   end
 
-  @spec by_name(String.t(), Hibiki.Entity.t()) :: Hibiki.Tag.t() | nil
+  @spec by_name(String.t(), Entity.t()) :: Tag.t() | nil
   def by_name(name, scope) do
-    from(t in Hibiki.Tag,
+    from(t in Tag,
       where: t.scope_id == ^scope.id,
       where: t.name == ^name
     )
     |> Hibiki.Repo.one()
   end
 
-  @spec get_from_tiered_scope(String.t(), Hibiki.Entity.t(), Hibiki.Entity.t()) ::
-          Hibiki.Tag.t() | nil
+  @spec get_from_tiered_scope(String.t(), Entity.t(), Hibiki.Entity.t()) ::
+          Tag.t() | nil
   def get_from_tiered_scope(name, scope, user) do
-    scopes = [user, scope, Hibiki.Entity.global()]
+    scopes = [user, scope, Entity.global()]
     name = String.downcase(name)
 
     get_from_tiered_scope(name, scopes)
   end
 
-  @spec get_from_tiered_scope(String.t(), [Hibiki.Entity.t()]) ::
-          Hibiki.Tag.t() | nil
+  @spec get_from_tiered_scope(String.t(), [Entity.t()]) ::
+          Tag.t() | nil
   def get_from_tiered_scope(name, scopes) do
     scopes
     |> Enum.dedup()
     |> Enum.reduce(nil, fn sc, acc ->
-      acc || Hibiki.Tag.by_name(name, sc)
+      acc || Tag.by_name(name, sc)
     end)
   end
 

@@ -10,6 +10,7 @@ defmodule Hibiki.Registry do
       Cmd.Case,
       Cmd.Info,
       Cmd.Upload,
+      Cmd.Tag,
       Cmd.Code
     ]
 end

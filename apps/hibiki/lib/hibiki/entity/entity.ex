@@ -9,8 +9,8 @@ defmodule Hibiki.Entity do
     field(:line_id, :string)
     field(:type, :string)
 
-    # has_many(:created_tags, Hibiki.Tag, foreign_key: :creator_id)
-    # has_many(:scope_tags, Hibiki.Tag, foreign_key: :scope_id)
+    has_many(:created_tags, Hibiki.Tag, foreign_key: :creator_id)
+    has_many(:scope_tags, Hibiki.Tag, foreign_key: :scope_id)
   end
 
   @type t :: %__MODULE__{
