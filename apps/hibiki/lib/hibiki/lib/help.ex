@@ -1,9 +1,15 @@
 defmodule Hibiki.Help do
   alias Teitoku.Command.Options, as: Opt
 
-  @spec gen_usage(module()) :: String.t()
-  def gen_usage(command) do
-    res = "Usage: !" <> command.name <> " "
+  @spec gen_usage(module(), list(module())) :: String.t()
+  def gen_usage(command, parent) do
+    cmds =
+      [command | parent]
+      |> Enum.map(fn x -> x.name end)
+      |> Enum.reverse()
+      |> Enum.join(" ")
+
+    res = "Usage: !" <> cmds <> " "
 
     opt = command.options
     flags = opt.flag
@@ -44,6 +50,15 @@ defmodule Hibiki.Help do
           end)
       ]
       |> Enum.join("\n")
+    end
+  end
+
+  def gen_subcommands(command) do
+    if command.subcommands() == [] do
+      ""
+    else
+      "Subcommands: " <>
+        (command.subcommands() |> Enum.map(fn x -> x.name() end) |> Enum.join(", "))
     end
   end
 

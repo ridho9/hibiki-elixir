@@ -15,7 +15,7 @@ defmodule Hibiki.Command.Help do
 
   def handle(%{"query" => ""}, _ctx) do
     all_command =
-      Hibiki.Registry.all()
+      Hibiki.Registry.subcommands()
       |> Enum.filter(fn x -> x.private == false end)
       |> Enum.map(fn x -> x.name end)
       |> Enum.sort()
@@ -32,15 +32,15 @@ defmodule Hibiki.Command.Help do
   end
 
   def handle(%{"query" => query}, _ctx) do
-    with {:ok, command, _} <- Teitoku.Command.Registry.resolve_text(query, Hibiki.Registry) do
-      usage = Help.gen_usage(command)
-
+    with {:ok, command, _, parent} <-
+           Teitoku.Command.Registry.resolve_command(Hibiki.Registry, query) do
       text =
         [
-          usage,
+          Help.gen_usage(command, parent),
           "  " <> command.description,
           Help.gen_flag_desc(command),
-          Help.gen_usage_desc(command)
+          Help.gen_usage_desc(command),
+          Help.gen_subcommands(command)
         ]
         |> Enum.filter(fn x -> x != "" end)
         |> Enum.join("\n")
