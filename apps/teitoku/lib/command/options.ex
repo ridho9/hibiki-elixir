@@ -5,9 +5,10 @@ defmodule Teitoku.Command.Options do
           named: list(),
           flag: list(),
           allow_empty: boolean(),
-          desc: map()
+          desc: map(),
+          hidden: list()
         }
-  defstruct named: [], flag: [], allow_empty: false, desc: %{}
+  defstruct named: [], flag: [], allow_empty: false, desc: %{}, hidden: []
 
   @spec add_named(Options.t(), String.t(), keyword()) :: Options.t()
   def add_named(%__MODULE__{named: named} = options, name, opt \\ []) do
@@ -26,11 +27,19 @@ defmodule Teitoku.Command.Options do
     %{options | allow_empty: true}
   end
 
-  defp add_desc(%__MODULE__{desc: desc} = options, name, opt) do
-    if opt[:desc] != nil do
-      %{options | desc: Map.put(desc, name, opt[:desc])}
-    else
-      options
-    end
+  defp add_desc(options, name, settings) do
+    Enum.reduce(settings, options, fn {key, value}, current ->
+      case key do
+        :desc ->
+          %{current | desc: Map.put(current.desc, name, value)}
+
+        :hidden ->
+          if value do
+            %{current | hidden: [name | current.hidden]}
+          else
+            current
+          end
+      end
+    end)
   end
 end

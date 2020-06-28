@@ -13,6 +13,7 @@ defmodule Hibiki.Command.Tag.Create do
       |> Options.add_named("name", desc: "tag name")
       |> Options.add_named("value", desc: "tag value")
       |> Options.add_flag("t", desc: "create text tag")
+      |> Options.add_flag("!", hidden: true)
 
   def handle(%{"name" => name, "value" => value, "t" => text}, %{source: source, user: user}) do
     type =

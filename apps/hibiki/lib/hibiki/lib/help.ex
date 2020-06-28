@@ -32,9 +32,14 @@ defmodule Hibiki.Help do
       [
         "Flags:"
         | Enum.map(command.options.flag, fn flag ->
-            "  -#{flag}: " <> Map.get(command.options.desc, flag, flag)
+            if flag not in command.options.hidden do
+              "  -#{flag}: " <> Map.get(command.options.desc, flag, flag)
+            else
+              ""
+            end
           end)
       ]
+      |> Enum.filter(fn x -> x != "" end)
       |> Enum.join("\n")
     end
   end
