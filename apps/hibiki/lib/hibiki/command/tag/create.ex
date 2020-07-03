@@ -12,10 +12,13 @@ defmodule Hibiki.Command.Tag.Create do
       %Options{}
       |> Options.add_named("name", desc: "tag name")
       |> Options.add_named("value", desc: "tag value")
-      |> Options.add_flag("t", desc: "create text tag")
-      |> Options.add_flag("!", hidden: true)
+      |> Options.add_flag("t", desc: "create text tag", name: "text")
+      |> Options.add_flag("!", hidden: true, name: "global")
 
-  def handle(%{"name" => name, "value" => value, "t" => text}, %{source: source, user: user}) do
+  def handle(%{"name" => name, "value" => value, "text" => text, "global" => global}, %{
+        source: source,
+        user: user
+      }) do
     type =
       if text do
         "text"
@@ -23,7 +26,13 @@ defmodule Hibiki.Command.Tag.Create do
         "image"
       end
 
-    scope = source
+    scope =
+      if global do
+        Hibiki.Entity.global()
+      else
+        source
+      end
+
     creator = user
     name = String.trim(name)
 
