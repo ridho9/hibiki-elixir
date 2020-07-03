@@ -23,4 +23,11 @@ defmodule Teitoku.Command.OptionsTest do
     expect = %Options{allow_empty: true}
     assert input == expect
   end
+
+  test "add name" do
+    input = %Options{} |> Options.add_named("arg1", name: "argument")
+
+    expect = %Options{named: ["arg1"], name: %{"arg1" => "argument"}}
+    assert input == expect
+  end
 end

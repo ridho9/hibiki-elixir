@@ -140,4 +140,16 @@ defmodule Teitoku.Command.ParserTest do
     expect = {:ok, %{"arg1" => "aaaa", "arg2" => ""}}
     assert Parser.parse(input, options) == expect
   end
+
+  test "parse name mapping 1" do
+    input = ""
+
+    options =
+      %Options{}
+      |> Options.add_named("arg1", name: "argument")
+      |> Options.allow_empty()
+
+    expect = {:ok, %{"argument" => ""}}
+    assert Parser.parse(input, options) == expect
+  end
 end

@@ -6,9 +6,10 @@ defmodule Teitoku.Command.Options do
           flag: list(),
           allow_empty: boolean(),
           desc: map(),
-          hidden: list()
+          hidden: list(),
+          name: map()
         }
-  defstruct named: [], flag: [], allow_empty: false, desc: %{}, hidden: []
+  defstruct named: [], flag: [], allow_empty: false, desc: %{}, hidden: [], name: %{}
 
   @spec add_named(Options.t(), String.t(), keyword()) :: Options.t()
   def add_named(%__MODULE__{named: named} = options, name, opt \\ []) do
@@ -32,6 +33,9 @@ defmodule Teitoku.Command.Options do
       case key do
         :desc ->
           %{current | desc: Map.put(current.desc, name, value)}
+
+        :name ->
+          %{current | name: Map.put(current.name, name, value)}
 
         :hidden ->
           if value do

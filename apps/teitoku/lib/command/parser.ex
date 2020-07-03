@@ -7,6 +7,7 @@ defmodule Teitoku.Command.Parser do
     with {:ok, result} <- parse_inner(String.trim(text), options) do
       result_keys = Map.keys(result)
 
+      # apply flag default value
       result_opt =
         Enum.reduce(options.flag, result, fn flag, map ->
           if flag not in result_keys do
@@ -15,6 +16,10 @@ defmodule Teitoku.Command.Parser do
             map
           end
         end)
+        |> Enum.map(fn {key, value} ->
+          {Map.get(options.name, key, key), value}
+        end)
+        |> Map.new()
 
       {:ok, result_opt}
     end
