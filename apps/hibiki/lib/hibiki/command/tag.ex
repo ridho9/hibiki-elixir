@@ -39,6 +39,7 @@ defmodule Hibiki.Command.Tag do
 
   def subcommands,
     do: [
-      Hibiki.Command.Tag.Create
+      Hibiki.Command.Tag.Create,
+      Hibiki.Command.Tag.List
     ]
 end
