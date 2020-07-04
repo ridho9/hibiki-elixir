@@ -26,6 +26,7 @@ defmodule Hibiki.Command.Tag.Create do
         "image"
       end
 
+    # TODO: Check if user is admin
     scope =
       if global do
         Hibiki.Entity.global()
