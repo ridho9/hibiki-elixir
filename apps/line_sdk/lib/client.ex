@@ -1,37 +1,43 @@
 defmodule LineSdk.Client do
+  alias LineSdk.Client
   @line_api_url "https://api.line.me/v2"
 
-  def send_reply(data, reply_token) when is_map(data), do: send_reply([data], reply_token)
+  @type t :: %__MODULE__{channel_access_token: String.t(), channel_secret: String.t()}
 
-  def send_reply(data, reply_token) do
+  defstruct channel_access_token: "", channel_secret: ""
+
+  def send_reply(client, data, reply_token) when is_map(data),
+    do: send_reply(client, [data], reply_token)
+
+  def send_reply(client, data, reply_token) do
     messages =
       data
       |> Enum.map(fn x -> LineSdk.MessageObject.to_object(x) end)
 
-    post("/bot/message/reply", %{
+    post(client, "/bot/message/reply", %{
       "replyToken" => reply_token,
       "messages" => messages
     })
   end
 
-  def get_content(message_id) do
+  def get_content(client, message_id) do
     with {:ok, %HTTPoison.Response{body: body, status_code: 200}} <-
-           get("/bot/message/#{message_id}/content") do
+           get(client, "/bot/message/#{message_id}/content") do
       {:ok, body}
     end
   end
 
-  def get(url) do
+  def get(%Client{channel_access_token: access_token}, url) do
     headers = [
-      {"Authorization", "Bearer #{LineSdk.Config.channel_access_token()}"}
+      {"Authorization", "Bearer #{access_token}"}
     ]
 
     HTTPoison.get(@line_api_url <> url, headers)
   end
 
-  def post(url, data) do
+  def post(%Client{channel_access_token: access_token}, url, data) do
     headers = [
-      {"Authorization", "Bearer #{LineSdk.Config.channel_access_token()}"},
+      {"Authorization", "Bearer #{access_token}"},
       {"Content-Type", "application/json"}
     ]
 

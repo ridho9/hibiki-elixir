@@ -19,7 +19,7 @@ defmodule Hibiki.Upload do
 
     case Cache.get(cache_key) do
       nil ->
-        with {:ok, image_binary} <- LineSdk.Client.get_content(image_id),
+        with {:ok, image_binary} <- LineSdk.Client.get_content(Hibiki.Config.client(), image_id),
              {:ok, image_url} <- upload_binary(provider, image_binary) do
           Cache.set(cache_key, image_url)
           {:ok, image_url}

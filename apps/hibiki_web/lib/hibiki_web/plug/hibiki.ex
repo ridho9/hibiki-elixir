@@ -18,7 +18,12 @@ defmodule HibikiWeb.Plug.Hibiki do
         _opts
       ) do
     with {:ok, signature} <- get_signature(conn),
-         {:ok, _} <- Teitoku.Validation.validate_message(raw_body, signature) do
+         {:ok, _} <-
+           Teitoku.Validation.validate_message(
+             raw_body,
+             Hibiki.Config.channel_secret(),
+             signature
+           ) do
       conn
     else
       {:error, err} ->
@@ -30,7 +35,7 @@ defmodule HibikiWeb.Plug.Hibiki do
 
   def process(%Plug.Conn{body_params: body} = conn, _opts) do
     with {:ok, body} <- LineSdk.Decoder.decode(body),
-         {:ok, _result} <- Teitoku.Event.handle(body, Hibiki.Converter) do
+         {:ok, _result} <- Teitoku.Event.handle(body, Hibiki.Config.client(), Hibiki.Converter) do
       conn
       |> send_resp(200, "Processed")
     else

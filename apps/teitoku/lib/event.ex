@@ -15,8 +15,8 @@ defmodule Teitoku.Event do
           | {:ignore, any}
           | {:continue, any}
 
-  @spec handle(LineSdk.Model.WebhookEvent.t(), module()) :: any
-  def handle(%LineSdk.Model.WebhookEvent{events: events}, converter) do
+  @spec handle(LineSdk.Model.WebhookEvent.t(), LineSdk.Client.t(), module()) :: any
+  def handle(%LineSdk.Model.WebhookEvent{events: events}, client, converter) do
     converted =
       events
       |> Enum.map(fn event ->
@@ -24,25 +24,25 @@ defmodule Teitoku.Event do
 
         event
         |> converter.convert()
-        |> process_event(reply_token)
+        |> process_event(client, reply_token)
       end)
 
     {:ok, converted}
   end
 
-  def process_event({:error, err}, _) do
+  def process_event({:error, err}, _, _) do
     {:ignore, err}
   end
 
-  def process_event({:ok, event, ctx}, reply_token) do
+  def process_event({:ok, event, ctx}, client, reply_token) do
     Teitoku.HandleableEvent.handle(event, ctx)
     |> case do
       {:reply, message} ->
-        LineSdk.Client.send_reply(message, reply_token)
+        LineSdk.Client.send_reply(client, message, reply_token)
 
       {:reply_error, err} ->
-        %LineSdk.Model.TextMessage{text: "Error: #{err}"}
-        |> LineSdk.Client.send_reply(reply_token)
+        msg = %LineSdk.Model.TextMessage{text: "Error: #{err}"}
+        LineSdk.Client.send_reply(client, msg, reply_token)
 
       {:error, _err} ->
         # TODO: Implement proper error logging
@@ -52,7 +52,7 @@ defmodule Teitoku.Event do
         nil
 
       {:continue, event} ->
-        process_event({:ok, event, ctx}, reply_token)
+        process_event({:ok, event, ctx}, client, reply_token)
     end
   end
 end
