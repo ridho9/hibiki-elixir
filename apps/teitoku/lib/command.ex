@@ -5,10 +5,27 @@ defmodule Teitoku.Command do
   @callback private() :: boolean()
   @callback subcommands() :: list(module())
 
+  @callback prehandle() :: list(function())
   @callback handle(Teitoku.Command.Options.t(), any) :: Teitoku.Event.result()
 
   def handle(command, args, ctx) do
-    command.handle(args, ctx)
+    case process_prehandle(command.prehandle, args, ctx) do
+      {:ok, args, ctx} ->
+        command.handle(args, ctx)
+
+      {:error, msg} ->
+        {:reply_error, msg}
+    end
+  end
+
+  def process_prehandle(prehandle, args, ctx)
+
+  def process_prehandle([], args, ctx), do: {:ok, args, ctx}
+
+  def process_prehandle([f | rest], args, ctx) do
+    with {:ok, args, ctx} <- apply(f, [args, ctx]) do
+      process_prehandle(rest, args, ctx)
+    end
   end
 
   defmacro __using__(_opts) do
@@ -19,6 +36,7 @@ defmodule Teitoku.Command do
       def description, do: "-- no desc --"
       def private, do: false
       def subcommands, do: []
+      def prehandle, do: []
 
       defoverridable(Teitoku.Command)
     end
