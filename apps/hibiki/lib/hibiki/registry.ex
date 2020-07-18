@@ -11,6 +11,7 @@ defmodule Hibiki.Registry do
       Cmd.Info,
       Cmd.Upload,
       Cmd.Tag,
-      Cmd.Code
+      Cmd.Code,
+      Cmd.Ryn
     ]
 end
