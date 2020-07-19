@@ -14,6 +14,12 @@ defmodule Hibiki.Command.Tag do
       |> Opt.add_flag("r", desc: "Raw value")
 
   def handle(%{"name" => name, "r" => raw}, %{source: source, user: user}) do
+    source =
+      cond do
+        true ->
+          source
+      end
+
     case Tag.get_from_tiered_scope(name, source, user) do
       nil ->
         {:reply_error, "Tag '#{name}' not found in this #{source.type}"}

@@ -15,19 +15,17 @@ defmodule Hibiki.Command.Tag.Create do
       |> Options.add_flag("t", desc: "create text tag", name: "text")
       |> Options.add_flag("!", hidden: true, name: "global")
 
-  def prehandle, do: [&load_global/2]
+  def prehandle,
+    do: [
+      &load_global/2,
+      &check_added/2
+    ]
 
-  def handle(%{"name" => name, "value" => value, "text" => text, "global" => global}, %{
+  def handle(%{"name" => name, "value" => value, "text" => text}, %{
         source: source,
         user: user
       }) do
-    # TODO: Check if user is admin
-    scope =
-      if global do
-        Hibiki.Entity.global()
-      else
-        source
-      end
+    scope = source
 
     type =
       if text do
@@ -61,6 +59,18 @@ defmodule Hibiki.Command.Tag.Create do
       {:ok, args, ctx}
     else
       {:error, "you are not an admin"}
+    end
+  end
+
+  def check_added(args, %{user: user} = ctx) do
+    user_id = user.user_id
+
+    case LineSdk.Client.get_profile(Hibiki.Config.client(), user_id) do
+      {:ok, _} ->
+        {:ok, args, ctx}
+
+      {:error, _} ->
+        {:error, "please add hibiki first"}
     end
   end
 end
