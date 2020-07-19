@@ -27,6 +27,20 @@ defmodule LineSdk.Client do
     end
   end
 
+  def get_profile(client, user_id) do
+    user_id = URI.encode(user_id)
+
+    with {:ok, %HTTPoison.Response{body: body, status_code: status_code}} <-
+           get(client, "/bot/profile/#{user_id}"),
+         {:ok, body} <- Jason.decode(body) do
+      case status_code do
+        200 -> {:ok, body}
+        404 -> {:error, body["message"]}
+        _ -> {:error, body}
+      end
+    end
+  end
+
   def get(%Client{channel_access_token: access_token}, url) do
     headers = [
       {"Authorization", "Bearer #{access_token}"}
