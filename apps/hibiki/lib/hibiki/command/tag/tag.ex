@@ -60,6 +60,7 @@ defmodule Hibiki.Command.Tag do
     do: [
       Hibiki.Command.Tag.Create,
       Hibiki.Command.Tag.List,
-      Hibiki.Command.Tag.Info
+      Hibiki.Command.Tag.Info,
+      Hibiki.Command.Tag.Delete
     ]
 end
