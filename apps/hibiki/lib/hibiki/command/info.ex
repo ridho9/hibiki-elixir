@@ -7,10 +7,14 @@ defmodule Hibiki.Command.Info do
 
   def private, do: true
 
-  def handle(_args, ctx) do
+  def handle(_args, _ctx) do
+    msg = ~s([Hibiki #{Application.spec(:hibiki, :vsn)}]
+Made by Ridho Pratama & Gabriel B. Raphael.
+Powered by Elixir.)
+
     {:reply,
      %LineSdk.Model.TextMessage{
-       text: "#{inspect(ctx)}"
+       text: msg
      }}
   end
 end
