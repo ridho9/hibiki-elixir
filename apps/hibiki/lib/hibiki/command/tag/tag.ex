@@ -13,24 +13,11 @@ defmodule Hibiki.Command.Tag do
       %Opt{}
       |> Opt.add_named("name", desc: "Tag name")
       |> Opt.add_flag("r", desc: "Raw value")
-      |> Opt.add_flag("!", desc: "Search from global scope")
-      |> Opt.add_flag("s", desc: "Search from group/room scope")
+      |> Opt.add_flag("!", desc: "Search from global scope", name: "global?")
+      |> Opt.add_flag("s", desc: "Search from group/room scope", name: "scope?")
 
-  def handle(%{"name" => name, "r" => raw, "!" => global, "s" => group}, %{
-        source: source,
-        user: user
-      }) do
-    scope =
-      cond do
-        global ->
-          [Hibiki.Entity.global()]
-
-        group ->
-          [source, Hibiki.Entity.global()]
-
-        true ->
-          [user, source, Hibiki.Entity.global()]
-      end
+  def handle(%{"name" => name, "r" => raw} = args, ctx) do
+    scope = resolve_scope(args, ctx)
 
     case Tag.get_from_tiered_scope(name, scope) do
       nil ->
@@ -53,6 +40,19 @@ defmodule Hibiki.Command.Tag do
           end
 
         {:reply, msg}
+    end
+  end
+
+  def resolve_scope(%{"global?" => global?, "scope?" => scope?}, %{source: source, user: user}) do
+    cond do
+      global? ->
+        [Hibiki.Entity.global()]
+
+      scope? ->
+        [source, Hibiki.Entity.global()]
+
+      true ->
+        [user, source, Hibiki.Entity.global()]
     end
   end
 

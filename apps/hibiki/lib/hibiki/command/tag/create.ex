@@ -12,8 +12,8 @@ defmodule Hibiki.Command.Tag.Create do
       %Options{}
       |> Options.add_named("name", desc: "tag name")
       |> Options.add_named("value", desc: "tag value")
-      |> Options.add_flag("t", desc: "create text tag", name: "text")
-      |> Options.add_flag("!", hidden: true, name: "global")
+      |> Options.add_flag("t", desc: "create text tag", name: "text?")
+      |> Options.add_flag("!", hidden: true, name: "global?")
 
   def prehandle,
     do: [
@@ -21,14 +21,14 @@ defmodule Hibiki.Command.Tag.Create do
       &check_added/2
     ]
 
-  def handle(%{"name" => name, "value" => value, "text" => text}, %{
+  def handle(%{"name" => name, "value" => value, "text?" => text?}, %{
         source: source,
         user: user
       }) do
     scope = source
 
     type =
-      if text do
+      if text? do
         "text"
       else
         "image"
@@ -49,12 +49,12 @@ defmodule Hibiki.Command.Tag.Create do
     end
   end
 
-  def load_global(%{"global" => false} = args, ctx) do
+  def load_global(%{"global?" => false} = args, ctx) do
     {:ok, args, ctx}
   end
 
   def load_global(
-        %{"global" => true} = args,
+        %{"global?" => true} = args,
         %{user: %Hibiki.Entity{line_id: user_id}} = ctx
       ) do
     if user_id in Hibiki.Config.admin_id() do
