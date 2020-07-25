@@ -53,8 +53,11 @@ defmodule Hibiki.Command.Tag.Create do
     {:ok, args, ctx}
   end
 
-  def load_global(%{"global" => true} = args, %{source: source} = ctx) do
-    if source.line_id in Hibiki.Config.admin_id() do
+  def load_global(
+        %{"global" => true} = args,
+        %{user: %Hibiki.Entity{line_id: user_id}} = ctx
+      ) do
+    if user_id in Hibiki.Config.admin_id() do
       ctx = %{ctx | source: Hibiki.Entity.global()}
       {:ok, args, ctx}
     else
@@ -62,9 +65,7 @@ defmodule Hibiki.Command.Tag.Create do
     end
   end
 
-  def check_added(args, %{user: user} = ctx) do
-    user_id = user.user_id
-
+  def check_added(args, %{user: %Hibiki.Entity{line_id: user_id}} = ctx) do
     case LineSdk.Client.get_profile(Hibiki.Config.client(), user_id) do
       {:ok, _} ->
         {:ok, args, ctx}
