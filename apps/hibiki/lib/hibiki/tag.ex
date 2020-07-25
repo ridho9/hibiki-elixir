@@ -93,18 +93,11 @@ defmodule Hibiki.Tag do
     |> Hibiki.Repo.one()
   end
 
-  @spec get_from_tiered_scope(String.t(), Entity.t(), Hibiki.Entity.t()) ::
-          Tag.t() | nil
-  def get_from_tiered_scope(name, scope, user) do
-    scopes = [user, scope, Entity.global()]
-    name = String.downcase(name)
-
-    get_from_tiered_scope(name, scopes)
-  end
-
   @spec get_from_tiered_scope(String.t(), [Entity.t()]) ::
           Tag.t() | nil
   def get_from_tiered_scope(name, scopes) do
+    name = String.downcase(name)
+
     scopes
     |> Enum.dedup()
     |> Enum.reduce(nil, fn sc, acc ->

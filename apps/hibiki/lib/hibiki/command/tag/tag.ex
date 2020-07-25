@@ -2,6 +2,7 @@ defmodule Hibiki.Command.Tag do
   use Teitoku.Command
   alias Teitoku.Command.Options, as: Opt
   alias Hibiki.Tag
+  alias Hibiki.Entity
 
   def name, do: "tag"
 
@@ -12,17 +13,29 @@ defmodule Hibiki.Command.Tag do
       %Opt{}
       |> Opt.add_named("name", desc: "Tag name")
       |> Opt.add_flag("r", desc: "Raw value")
+      |> Opt.add_flag("!", desc: "Search from global scope")
+      |> Opt.add_flag("s", desc: "Search from group/room scope")
 
-  def handle(%{"name" => name, "r" => raw}, %{source: source, user: user}) do
-    source =
+  def handle(%{"name" => name, "r" => raw, "!" => global, "s" => group}, %{
+        source: source,
+        user: user
+      }) do
+    scope =
       cond do
+        global ->
+          [Hibiki.Entity.global()]
+
+        group ->
+          [source, Hibiki.Entity.global()]
+
         true ->
-          source
+          [user, source, Hibiki.Entity.global()]
       end
 
-    case Tag.get_from_tiered_scope(name, source, user) do
+    case Tag.get_from_tiered_scope(name, scope) do
       nil ->
-        {:reply_error, "Tag '#{name}' not found in this #{source.type}"}
+        [%Entity{type: scope_type} | _] = scope
+        {:reply_error, "Tag '#{name}' not found in this #{scope_type}"}
 
       %Tag{value: value, type: type} ->
         msg =
