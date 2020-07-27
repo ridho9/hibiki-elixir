@@ -12,6 +12,7 @@ defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Command do
     |> Teitoku.Command.Registry.prepare(Hibiki.Registry)
     |> case do
       {:ok, command, args} ->
+        Logger.metadata(command: command, command_args: args, command_ctx: ctx)
         Teitoku.Command.handle(command, args, ctx)
 
       {:error, msg} ->

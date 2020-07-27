@@ -4,6 +4,7 @@ defmodule HibikiWeb.Application do
   @moduledoc false
 
   use Application
+  require Logger
 
   def start(_type, _args) do
     port = Application.get_env(:hibiki_web, :port, 8080)
@@ -14,7 +15,7 @@ defmodule HibikiWeb.Application do
       {Plug.Cowboy, scheme: :http, plug: HibikiWeb.Router, options: [port: port]}
     ]
 
-    IO.puts("Starting server at :#{port}")
+    Logger.info("Starting server at :#{port}")
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

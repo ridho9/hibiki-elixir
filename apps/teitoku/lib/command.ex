@@ -8,6 +8,8 @@ defmodule Teitoku.Command do
   @callback prehandle() :: list(function())
   @callback handle(Teitoku.Command.Options.t(), any) :: Teitoku.Event.result()
 
+  require Logger
+
   def handle(command, args, ctx) do
     case process_prehandle(command.prehandle, args, ctx) do
       {:ok, args, ctx} ->

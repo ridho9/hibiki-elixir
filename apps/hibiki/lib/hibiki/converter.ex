@@ -1,6 +1,6 @@
 defmodule Hibiki.Converter do
-  def convert(event) do
-    Hibiki.Convertable.convert(event, %{})
+  def convert(event, ctx \\ %{}) do
+    Hibiki.Convertable.convert(event, ctx)
   end
 end
 
