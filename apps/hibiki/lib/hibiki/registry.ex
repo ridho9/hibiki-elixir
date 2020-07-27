@@ -12,6 +12,7 @@ defmodule Hibiki.Registry do
       Cmd.Upload,
       Cmd.Tag,
       Cmd.Code,
+      Cmd.Sauce,
       Cmd.Ryn
     ]
 end

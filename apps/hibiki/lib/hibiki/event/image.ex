@@ -11,7 +11,6 @@ defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Image do
     #  }}
 
     source
-    |> Hibiki.Entity.from_source()
     |> Hibiki.Entity.Data.set(Hibiki.Entity.Data.Key.last_image_id(), id)
 
     {:ignore, nil}
