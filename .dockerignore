@@ -21,9 +21,6 @@ erl_crash.dump
 
 .elixir_ls
 
-/config/*
-!/config/config.exs
-!/config/test.exs
-!/config/releases.exs
 *.dets
-prod.env
+
+.git
