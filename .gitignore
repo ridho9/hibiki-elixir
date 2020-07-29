@@ -23,6 +23,7 @@ erl_crash.dump
 
 /config/*
 !/config/config.exs
+!/config/prod.exs
 !/config/test.exs
 !/config/releases.exs
 *.dets
