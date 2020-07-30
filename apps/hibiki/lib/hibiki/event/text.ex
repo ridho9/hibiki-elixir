@@ -7,6 +7,14 @@ defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Text do
   def handle(%Hibiki.Event.Text{text: text}, _ctx) do
     text = String.trim(text)
 
+    # check for tag shortcut
+    text =
+      Regex.run(~r/#([^\n#]+)#/, text)
+      |> case do
+        [_, tag] -> "!tag - #{tag}"
+        _ -> text
+      end
+
     cond do
       String.starts_with?(text, "!") and not String.starts_with?(text, "!!") ->
         {:continue, %Hibiki.Event.Command{text: text}}
