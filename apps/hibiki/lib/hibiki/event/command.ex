@@ -17,7 +17,10 @@ defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Command do
         Logger.metadata(command: command, command_args: args, command_ctx: ctx)
         Logger.info("start handle command")
 
-        Teitoku.Command.handle(command, args, ctx)
+        res = Teitoku.Command.handle(command, args, ctx)
+        Logger.info("end handle command", command_result: res)
+
+        res
 
       {:error, msg} ->
         {:reply_error, msg}
