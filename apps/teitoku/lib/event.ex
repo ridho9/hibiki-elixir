@@ -33,6 +33,8 @@ defmodule Teitoku.Event do
   end
 
   def process_event({:ok, event, ctx}, client, reply_token) do
+    Logger.metadata(reply_token: reply_token)
+
     Teitoku.HandleableEvent.handle(event, ctx)
     |> case do
       {:reply, message} ->

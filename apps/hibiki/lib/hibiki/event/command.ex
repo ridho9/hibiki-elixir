@@ -4,6 +4,8 @@ defmodule Hibiki.Event.Command do
 end
 
 defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Command do
+  require Logger
+
   def handle(%Hibiki.Event.Command{text: text}, ctx) do
     # start parsing and defining command here
     text
@@ -13,6 +15,8 @@ defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Command do
     |> case do
       {:ok, command, args} ->
         Logger.metadata(command: command, command_args: args, command_ctx: ctx)
+        Logger.info("start handle command")
+
         Teitoku.Command.handle(command, args, ctx)
 
       {:error, msg} ->

@@ -28,3 +28,4 @@ erl_crash.dump
 !/config/releases.exs
 *.dets
 prod.env
+postgres
