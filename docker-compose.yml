@@ -2,7 +2,7 @@ version: "2.0"
 services:
     app:
         build: .
-        # image: rid9/hibiki-elixir:1.0.0
+        # image: rid9/hibiki-elixir:tag
         ports:
             - "8080:8080"
         links:
@@ -16,4 +16,4 @@ services:
         environment:
             - POSTGRES_PASSWORD=docker
         volumes:
-            - ~/docker/volumes/postgres:/var/lib/postgresql/data
+            - postgres:/var/lib/postgresql/data
