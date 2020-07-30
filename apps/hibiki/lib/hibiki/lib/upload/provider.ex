@@ -45,6 +45,7 @@ end
 
 defmodule Hibiki.Upload.Provider.Tenshi do
   use Hibiki.Upload.Provider
+  require Logger
 
   import Hibiki.Upload.Provider.Catbox, only: [mime_file: 1]
 
@@ -55,15 +56,20 @@ defmodule Hibiki.Upload.Provider.Tenshi do
          :ok <- File.write(path, binary),
          {:ok, mime} <- mime_file(path),
          ext = mime |> :mimerl.mime_to_exts() |> hd do
+      Logger.info("mime #{mime} ext #{ext}")
+
       file =
         {:file, path, {"form-data", [name: "file", filename: Path.basename(path) <> ".#{ext}"]},
          []}
 
       data = {:multipart, [file]}
       url = "https://file.tenshi.dev/upload"
+      Logger.info("uploading to #{url} #{data}")
 
       result = HTTPoison.post(url, data)
       File.rm(path)
+
+      Logger.info("result #{result}")
 
       with {:ok, %HTTPoison.Response{body: body}} <- result,
            {:ok, body} <- Jason.decode(body),

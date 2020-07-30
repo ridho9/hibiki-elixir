@@ -4,6 +4,8 @@ defmodule Hibiki.Command.Upload do
   alias Hibiki.Upload
   alias LineSdk.Model
 
+  require Logger
+
   def name, do: "upload"
 
   def description, do: "Upload last sent image from this scope to catbox"
@@ -16,6 +18,8 @@ defmodule Hibiki.Command.Upload do
         {:reply_error, "Please send an image first"}
 
       image_id ->
+        Logger.info("image id #{image_id}")
+
         case Upload.upload_from_image_id(Upload.Provider.Tenshi, image_id) do
           {:error, err} ->
             {:reply_error, err}

@@ -2,8 +2,11 @@ defmodule Hibiki.Upload do
   alias Hibiki.Upload.Provider.Catbox
   alias Hibiki.Cache
 
+  require Logger
+
   @spec upload_binary(module, binary) :: {:ok, String.t()} | {:error, any}
   def upload_binary(provider, binary) do
+    Logger.info("upload binary to #{provider}")
     provider.upload_binary(binary)
   end
 
