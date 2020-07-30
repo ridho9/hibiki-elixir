@@ -64,21 +64,29 @@ defmodule Hibiki.Upload.Provider.Tenshi do
 
       data = {:multipart, [file]}
       url = "https://file.tenshi.dev/upload"
-      Logger.info("uploading to #{url} #{data}")
+      Logger.info("data #{inspect(data)}")
 
-      result = HTTPoison.post(url, data)
-      File.rm(path)
+      result = HTTPoison.post!(url, data, [], recv_timeout: 30000, timeout: 30000)
+      Logger.info("post result #{inspect(result)}")
 
-      Logger.info("result #{result}")
+      rm_res = File.rm(path)
+      Logger.info("rm result #{inspect(rm_res)}")
 
-      with {:ok, %HTTPoison.Response{body: body}} <- result,
-           {:ok, body} <- Jason.decode(body),
-           %{"code" => code, "message" => message} = body do
-        case code do
-          200 -> {:ok, "https://file.tenshi.dev/download?file=#{message}"}
-          _ -> {:error, message}
+      # with {:ok, %HTTPoison.Response{body: body}} <- result,
+      res =
+        with %HTTPoison.Response{body: body} <- result,
+             {:ok, body} <- Jason.decode(body),
+             Logger.info(inspect(body)),
+             %{"code" => code, "message" => message} = body do
+          case code do
+            200 -> {:ok, "https://file.tenshi.dev/download?file=#{message}"}
+            _ -> {:error, message}
+          end
         end
-      end
+
+      Logger.info("result #{inspect(res)}")
+
+      res
     end
   end
 end
