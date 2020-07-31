@@ -18,7 +18,7 @@ RUN mix deps.get && \
 # ===========================================
 
 FROM alpine:3
-RUN apk add --no-cache openssl ncurses-libs bash file
+RUN apk add --no-cache openssl ncurses-libs bash file curl
 
 WORKDIR /app
 COPY --from=builder /src/_build/prod/rel/hibiki_elixir/ .

@@ -2,7 +2,7 @@ version: "2.0"
 services:
     app:
         # build: .
-        image: rid9/hibiki-elixir:1.3.0
+        image: rid9/hibiki-elixir:1.7.0
         ports:
             - "8080:8080"
         links:
@@ -11,9 +11,21 @@ services:
             - prod.env
         depends_on:
             - postgres
+        networks:
+            default:
+            global:
+                aliases:
+                    - hibiki
     postgres:
         image: postgres
         environment:
             - POSTGRES_PASSWORD=docker
         volumes:
             - ./postgres:/var/lib/postgresql/data
+        networks:
+            default:
+
+networks:
+    global:
+        external: true
+    default:
