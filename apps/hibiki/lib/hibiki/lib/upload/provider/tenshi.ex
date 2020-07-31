@@ -24,6 +24,7 @@ defmodule Hibiki.Upload.Provider.Tenshi do
         |> Multipart.add_file(path, name: "file", filename: filename, detect_content_type: true)
 
       result = post("/upload", body)
+      File.rm(path)
 
       with {:ok, %Tesla.Env{body: body}} <- result,
            Logger.info(body),
