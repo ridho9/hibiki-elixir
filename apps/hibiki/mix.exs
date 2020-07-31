@@ -30,6 +30,7 @@ defmodule Hibiki.MixProject do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       # {:sibling_app_in_umbrella, in_umbrella: true}
       {:httpoison, "~> 1.6"},
+      {:tesla, "~> 1.3.0"},
       {:jason, "~> 1.1"},
       {:temp, "~> 0.4.7"},
       {:ecto_sql, "~> 3.0"},
