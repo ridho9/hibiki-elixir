@@ -27,9 +27,7 @@ defmodule Hibiki.Upload.Provider.Tenshi do
       File.rm(path)
 
       with {:ok, %Tesla.Env{body: body}} <- result,
-           Logger.info(body),
            {:ok, body} <- Jason.decode(body),
-           Logger.info(inspect(body)),
            %{"code" => code, "message" => message} = body do
         case code do
           200 -> {:ok, "https://file.tenshi.dev/download?file=#{message}"}
