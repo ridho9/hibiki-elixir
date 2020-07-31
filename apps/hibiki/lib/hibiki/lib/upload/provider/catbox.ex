@@ -4,6 +4,7 @@ defmodule Hibiki.Upload.Provider.Catbox do
   use Tesla
   alias Tesla.Multipart
   plug(Tesla.Middleware.BaseUrl, "https://catbox.moe/user/api.php")
+  plug(Tesla.Middleware.Timeout, timeout: 20_000)
 
   def id, do: :catbox
 

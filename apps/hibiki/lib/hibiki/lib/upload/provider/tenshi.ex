@@ -5,6 +5,7 @@ defmodule Hibiki.Upload.Provider.Tenshi do
   use Tesla
   alias Tesla.Multipart
   plug(Tesla.Middleware.BaseUrl, "https://file.tenshi.dev")
+  plug(Tesla.Middleware.Timeout, timeout: 20_000)
 
   import Hibiki.Upload.Provider.Catbox, only: [mime_file: 1]
 
