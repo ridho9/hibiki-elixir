@@ -10,6 +10,12 @@ defmodule Hibiki.Upload do
     provider.upload_binary(binary)
   end
 
+  def upload_base64(provider, string) do
+    with {:ok, binary} <- Base.decode64(string) do
+      provider.upload_binary(binary)
+    end
+  end
+
   @spec upload_base64_to_catbox(String.t()) :: {:ok, String.t()} | {:error, any}
   def upload_base64_to_catbox(string) do
     with {:ok, binary} <- Base.decode64(string) do
