@@ -2,6 +2,11 @@ defmodule Hibiki.Command.Code do
   use Teitoku.Command
   alias Teitoku.Command.Options
 
+  use Tesla
+  plug(Tesla.Middleware.BaseUrl, "https://opener.now.sh/api")
+  plug(Tesla.Middleware.FollowRedirects)
+  plug(Tesla.Middleware.Timeout, timeout: 20_000)
+
   def name, do: "code"
 
   def description, do: "THE NUMBERS WHAT IT MEANS"
@@ -17,12 +22,9 @@ defmodule Hibiki.Command.Code do
   def handle(%{"code" => code} = args, _ctx) do
     code = URI.encode_www_form(code)
 
-    url =
-      "https://opener.now.sh/api/data/#{code}"
-      |> String.trim()
-      |> URI.encode()
+    url = "/data/#{code}"
 
-    with {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.get(url, follow_redirect: true),
+    with {:ok, %Tesla.Env{body: body}} <- get(url),
          {:ok, result} <- Jason.decode(body) do
       handle_result(args, result)
     end
