@@ -3,7 +3,7 @@ defmodule Hibiki.Command.Code do
   alias Teitoku.Command.Options
 
   use Tesla
-  plug(Tesla.Middleware.BaseUrl, "https://opener.now.sh/api")
+  plug(Tesla.Middleware.BaseUrl, "https://nhentai.net/api")
   plug(Tesla.Middleware.FollowRedirects)
   plug(Tesla.Middleware.Timeout, timeout: 20_000)
 
@@ -22,7 +22,7 @@ defmodule Hibiki.Command.Code do
   def handle(%{"code" => code} = args, _ctx) do
     code = URI.encode_www_form(code)
 
-    url = "/data/#{code}"
+    url = "/gallery/#{code}"
 
     with {:ok, %Tesla.Env{body: body}} <- get(url),
          {:ok, result} <- Jason.decode(body) do
@@ -30,7 +30,7 @@ defmodule Hibiki.Command.Code do
     end
   end
 
-  defp handle_result(%{"code" => code, "o" => open}, %{"success" => true} = result) do
+  defp handle_result(%{"code" => code, "o" => open}, result) do
     %{"title" => title, "tags" => tags} = result
     title = title["english"] || title["japanese"]
 
