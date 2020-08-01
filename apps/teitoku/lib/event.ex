@@ -1,4 +1,6 @@
 defmodule Teitoku.Event do
+  require Logger
+
   @typedoc """
   - `{:ok, any}` don't do anything
   - `{:reply, message}` to reply with a successful message.
@@ -44,8 +46,9 @@ defmodule Teitoku.Event do
         msg = %LineSdk.Model.TextMessage{text: "Error: #{err}"}
         LineSdk.Client.send_reply(client, msg, reply_token)
 
-      {:error, _err} ->
+      {:error, err} ->
         # TODO: Implement proper error logging
+        Logger.error(inspect(err))
         nil
 
       {:ignore, _} ->
