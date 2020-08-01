@@ -26,15 +26,6 @@ defmodule Hibiki.Upload.Provider.Catbox do
         |> Multipart.add_field("userhash", "")
 
       result = post("", body)
-
-      # file =
-      #   {:file, path,
-      #    {"form-data", [name: "fileToUpload", filename: Path.basename(path) <> ".#{ext}"]}, []}
-
-      # data = {:multipart, [file, {"reqtype", "fileupload"}, {"userhash", ""}]}
-      # url = "https://catbox.moe/user/api.php"
-
-      # result = HTTPoison.post(url, data)
       File.rm(path)
 
       with {:ok, %Tesla.Env{body: link}} <- result do
