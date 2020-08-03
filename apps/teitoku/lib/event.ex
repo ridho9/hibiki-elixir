@@ -21,7 +21,9 @@ defmodule Teitoku.Event do
   def handle(%LineSdk.Model.WebhookEvent{events: events}, client, converter) do
     converted =
       events
-      |> Enum.map(fn %{reply_token: reply_token} = event ->
+      |> Enum.map(fn event ->
+        reply_token = Map.get(event, :reply_token) || Map.get(event, "replyToken")
+
         event
         |> converter.convert(%{start_time: DateTime.utc_now()})
         |> process_event(client, reply_token)
