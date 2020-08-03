@@ -12,5 +12,5 @@ defprotocol Hibiki.Convertable do
 end
 
 defimpl Hibiki.Convertable, for: Any do
-  def convert(obj, ctx), do: {:ignore, {obj, ctx}}
+  def convert(obj, ctx), do: {:error, {obj, ctx}}
 end
