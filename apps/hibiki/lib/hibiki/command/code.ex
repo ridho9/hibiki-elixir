@@ -30,8 +30,11 @@ defmodule Hibiki.Command.Code do
     end
   end
 
-  defp handle_result(%{"code" => code, "o" => open}, result) do
-    %{"title" => title, "tags" => tags} = result
+  defp handle_result(_, %{"error" => err}) do
+    {:reply_error, err}
+  end
+
+  defp handle_result(%{"code" => code, "o" => open}, %{"title" => title, "tags" => tags}) do
     title = title["english"] || title["japanese"]
 
     artists = get_tags_by_type(tags, "artist")
@@ -59,10 +62,6 @@ defmodule Hibiki.Command.Code do
     ]
 
     {:reply, resp}
-  end
-
-  defp handle_result(_, %{"success" => false} = result) do
-    {:reply_error, result["description"]}
   end
 
   defp create_button_message(code) do
