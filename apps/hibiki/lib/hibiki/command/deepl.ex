@@ -5,6 +5,7 @@ defmodule Hibiki.Command.Deepl do
   use Tesla
   plug(Tesla.Middleware.BaseUrl, Hibiki.Config.deepl_proxy())
   plug(Tesla.Middleware.JSON)
+  plug(Tesla.Middleware.Timeout, timeout: 30_000)
 
   def name, do: "deepl"
 
