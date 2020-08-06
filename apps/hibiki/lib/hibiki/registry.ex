@@ -13,6 +13,7 @@ defmodule Hibiki.Registry do
       Cmd.Tag,
       Cmd.Code,
       Cmd.Sauce,
+      Cmd.Deepl,
       Cmd.Ryn
     ]
 end

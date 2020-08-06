@@ -10,7 +10,8 @@ config :hibiki,
 config :hibiki,
   admin_id: [],
   channel_access_token: nil,
-  channel_secret: nil
+  channel_secret: nil,
+  deepl_proxy: nil
 
 config :hibiki, Hibiki.Repo,
   database: "hibiki_repo",

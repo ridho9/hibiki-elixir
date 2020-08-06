@@ -9,4 +9,6 @@ defmodule Hibiki.Config do
       channel_access_token: channel_access_token(),
       channel_secret: channel_secret()
     }
+
+  def deepl_proxy, do: Application.get_env(:hibiki, :deepl_proxy)
 end
