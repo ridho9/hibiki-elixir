@@ -2,7 +2,7 @@ version: "2.0"
 services:
     app:
         # build: .
-        image: rid9/hibiki-elixir:1.10.0
+        image: rid9/hibiki-elixir:1.11.0
         ports:
             - "8080:8080"
         links:
