@@ -1,4 +1,4 @@
-defmodule Hibiki.Command.Deepl do
+defmodule Hibiki.Command.Tl do
   use Teitoku.Command
   alias Teitoku.Command.Options
 
@@ -7,9 +7,9 @@ defmodule Hibiki.Command.Deepl do
   plug(Tesla.Middleware.JSON)
   plug(Tesla.Middleware.Timeout, timeout: 30_000)
 
-  def name, do: "deepl"
+  def name, do: "tl"
 
-  def description, do: "Translate (almost) any language to english. Powered by DeepL."
+  def description, do: "Translate (almost) any language to english."
 
   def options,
     do:
