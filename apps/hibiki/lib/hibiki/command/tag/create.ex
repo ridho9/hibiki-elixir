@@ -35,7 +35,7 @@ defmodule Hibiki.Command.Tag.Create do
       end
 
     creator = user
-    name = String.trim(name)
+    name = String.trim(name) |> String.downcase()
 
     case Tag.create(name, type, value, creator, scope) do
       {:ok, tag} ->

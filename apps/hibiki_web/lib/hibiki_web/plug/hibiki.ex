@@ -35,9 +35,27 @@ defmodule HibikiWeb.Plug.Hibiki do
 
   def process(%Plug.Conn{body_params: body} = conn, _opts) do
     with {:ok, body} <- LineSdk.Decoder.decode(body),
-         {:ok, _result} <- Teitoku.Event.handle(body, Hibiki.Config.client(), Hibiki.Converter) do
+         {:ok, result} <- Teitoku.Event.handle(body, Hibiki.Config.client(), Hibiki.Converter) do
+      [status, _] =
+        List.zip(result)
+        |> Enum.map(fn x ->
+          Tuple.to_list(x)
+        end)
+
+      status_code =
+        if :error in status do
+          500
+        else
+          200
+        end
+
+      result_string =
+        result
+        |> Enum.map(fn x -> inspect(x, pretty: true) end)
+        |> Enum.join("========================\n")
+
       conn
-      |> send_resp(200, "Processed")
+      |> send_resp(status_code, result_string)
     else
       {:error, err} ->
         conn |> send_resp(500, "#{err}")

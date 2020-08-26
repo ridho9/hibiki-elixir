@@ -25,6 +25,7 @@ defmodule Hibiki.Upload do
 
   def upload_from_image_id(provider, image_id) do
     cache_key = Cache.Key.uploaded_image_url(image_id, provider.id)
+    Logger.info("upload with #{provider} cache key #{inspect(cache_key)}")
 
     case Cache.get(cache_key) do
       nil ->

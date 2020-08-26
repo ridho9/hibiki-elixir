@@ -1,11 +1,6 @@
 defmodule Hibiki.Upload.Provider.Catbox do
   use Hibiki.Upload.Provider
 
-  use Tesla
-  alias Tesla.Multipart
-  plug(Tesla.Middleware.BaseUrl, "https://catbox.moe/user/api.php")
-  plug(Tesla.Middleware.Timeout, timeout: 20_000)
-
   def id, do: :catbox
 
   def upload_binary(binary) do
@@ -13,22 +8,23 @@ defmodule Hibiki.Upload.Provider.Catbox do
          :ok <- File.write(path, binary),
          {:ok, mime} <- mime_file(path),
          ext = mime |> :mimerl.mime_to_exts() |> hd do
-      filename = Path.basename(path) <> ".#{ext}"
+      file =
+        {:file, path,
+         {"form-data", [name: "fileToUpload", filename: Path.basename(path) <> ".#{ext}"]}, []}
 
-      body =
-        Multipart.new()
-        |> Multipart.add_file(path,
-          name: "fileToUpload",
-          filename: filename,
-          detect_content_type: true
+      data = {:multipart, [file, {"reqtype", "fileupload"}, {"userhash", ""}]}
+      url = "https://catbox.moe/user/api.php"
+
+      result =
+        HTTPoison.post(url, data, [],
+          hackney: [pool: :catbox],
+          recv_timeout: 60_000,
+          timeout: 60_000
         )
-        |> Multipart.add_field("reqtype", "fileupload")
-        |> Multipart.add_field("userhash", "")
 
-      result = post("", body)
       File.rm(path)
 
-      with {:ok, %Tesla.Env{body: link}} <- result do
+      with {:ok, %HTTPoison.Response{body: link}} <- result do
         {:ok, link}
       end
     end

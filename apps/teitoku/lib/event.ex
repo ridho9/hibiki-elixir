@@ -24,9 +24,16 @@ defmodule Teitoku.Event do
       |> Enum.map(fn event ->
         reply_token = Map.get(event, :reply_token) || Map.get(event, "replyToken")
 
-        event
-        |> converter.convert(%{start_time: DateTime.utc_now()})
-        |> process_event(client, reply_token)
+        res =
+          event
+          |> converter.convert(%{start_time: DateTime.utc_now()})
+          |> process_event(client, reply_token)
+
+        with {:error, err} <- res do
+          Logger.error(inspect(err))
+        end
+
+        res
       end)
 
     {:ok, converted}
@@ -48,16 +55,11 @@ defmodule Teitoku.Event do
         msg = %LineSdk.Model.TextMessage{text: "Error: #{err}"}
         LineSdk.Client.send_reply(client, msg, reply_token)
 
-      {:error, err} ->
-        # TODO: Implement proper error logging
-        Logger.error(inspect(err))
-        nil
-
-      {:ignore, _} ->
-        nil
-
       {:continue, event} ->
         process_event({:ok, event, ctx}, client, reply_token)
+
+      res ->
+        res
     end
   end
 end

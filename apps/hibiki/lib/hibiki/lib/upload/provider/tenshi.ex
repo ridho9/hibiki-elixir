@@ -2,11 +2,6 @@ defmodule Hibiki.Upload.Provider.Tenshi do
   require Logger
   use Hibiki.Upload.Provider
 
-  use Tesla
-  alias Tesla.Multipart
-  plug(Tesla.Middleware.BaseUrl, "https://file.tenshi.dev")
-  plug(Tesla.Middleware.Timeout, timeout: 20_000)
-
   import Hibiki.Upload.Provider.Catbox, only: [mime_file: 1]
 
   def id, do: :tenshi
@@ -18,23 +13,41 @@ defmodule Hibiki.Upload.Provider.Tenshi do
          ext = mime |> :mimerl.mime_to_exts() |> hd do
       Logger.info("mime #{mime} ext #{ext}")
 
-      filename = Path.basename(path) <> ".#{ext}"
+      file =
+        {:file, path, {"form-data", [name: "file", filename: Path.basename(path) <> ".#{ext}"]},
+         []}
 
-      body =
-        Multipart.new()
-        |> Multipart.add_file(path, name: "file", filename: filename, detect_content_type: true)
+      data = {:multipart, [file]}
+      url = "https://file.tenshi.dev/upload"
+      Logger.info("data #{inspect(data)}")
 
-      result = post("/upload", body)
-      File.rm(path)
+      result =
+        HTTPoison.post(url, data, [],
+          hackney: [pool: :tenshi],
+          recv_timeout: 60_000,
+          timeout: 60_000
+        )
 
-      with {:ok, %Tesla.Env{body: body}} <- result,
-           {:ok, body} <- Jason.decode(body),
-           %{"code" => code, "message" => message} = body do
-        case code do
-          200 -> {:ok, "https://file.tenshi.dev/download?file=#{message}"}
-          _ -> {:error, message}
+      Logger.info("post result #{inspect(result)}")
+
+      rm_res = File.rm(path)
+      Logger.info("rm result #{inspect(rm_res)}")
+
+      # with {:ok, %HTTPoison.Response{body: body}} <- result,
+      res =
+        with {:ok, %HTTPoison.Response{body: body}} <- result,
+             {:ok, body} <- Jason.decode(body),
+             Logger.info(inspect(body)),
+             %{"code" => code, "message" => message} = body do
+          case code do
+            200 -> {:ok, "https://file.tenshi.dev/download?file=#{message}"}
+            _ -> {:error, message}
+          end
         end
-      end
+
+      Logger.info("result #{inspect(res)}")
+
+      res
     end
   end
 end

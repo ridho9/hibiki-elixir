@@ -2,11 +2,6 @@ defmodule Hibiki.Command.Tl do
   use Teitoku.Command
   alias Teitoku.Command.Options
 
-  use Tesla
-  plug(Tesla.Middleware.BaseUrl, Hibiki.Config.deepl_proxy())
-  plug(Tesla.Middleware.JSON)
-  plug(Tesla.Middleware.Timeout, timeout: 30_000)
-
   def name, do: "tl"
 
   def description, do: "Translate (almost) any language to english."
@@ -17,11 +12,11 @@ defmodule Hibiki.Command.Tl do
       |> Options.add_named("query", desc: "sentence to translate")
 
   def handle(%{"query" => query}, _ctx) do
-    with {:ok,
-          %Tesla.Env{
-            body: %{"result" => result, "src_lang" => src_lang}
-          }} <-
-           post("/translate/tl", %{"src" => query}) do
+    url = Hibiki.Config.deepl_proxy() <> "/translate/tl"
+
+    with {:ok, body} <- Jason.encode(%{"src" => query}),
+         {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.post(url, body),
+         {:ok, %{"result" => result, "src_lang" => src_lang}} <- Jason.decode(body) do
       {:reply,
        %LineSdk.Model.TextMessage{
          text: "#{query} (#{src_lang}) => #{result}"

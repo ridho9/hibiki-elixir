@@ -41,12 +41,20 @@ defmodule LineSdk.Client do
     end
   end
 
+  defp request_options do
+    [
+      hackney: [pool: :line_client],
+      timeout: 60_000,
+      recv_timeout: 60_000
+    ]
+  end
+
   def get(%Client{channel_access_token: access_token}, url) do
     headers = [
       {"Authorization", "Bearer #{access_token}"}
     ]
 
-    HTTPoison.get(@line_api_url <> url, headers)
+    HTTPoison.get(@line_api_url <> url, headers, request_options())
   end
 
   def post(%Client{channel_access_token: access_token}, url, data) do
@@ -56,7 +64,7 @@ defmodule LineSdk.Client do
     ]
 
     with {:ok, data} <- Jason.encode(data) do
-      HTTPoison.post(@line_api_url <> url, data, headers)
+      HTTPoison.post(@line_api_url <> url, data, headers, request_options())
     end
   end
 end

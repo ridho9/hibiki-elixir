@@ -8,7 +8,7 @@ defmodule HibikiElixir.MixProject do
       deps: deps(),
       releases: [
         hibiki_elixir: [
-          version: "1.12.0",
+          version: "1.13.0",
           applications: [
             hibiki: :permanent,
             hibiki_web: :permanent
