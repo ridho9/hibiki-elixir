@@ -7,4 +7,6 @@ echo update docker-compose to $LATEST_TAG
 
 cd ..
 
+docker-compose up -d
+
 cd src
