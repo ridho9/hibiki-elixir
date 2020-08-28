@@ -5,6 +5,9 @@ config :hibiki,
   channel_access_token: "cat",
   channel_secret: "secret"
 
+config :hibiki,
+  tag: "TEST"
+
 config :hibiki_web,
   port: 8080
 

@@ -13,6 +13,9 @@ config :hibiki,
   channel_secret: nil,
   deepl_proxy: nil
 
+config :hibiki,
+  tag: nil
+
 config :hibiki, Hibiki.Repo,
   database: "hibiki_repo",
   username: "user",

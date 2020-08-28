@@ -8,12 +8,20 @@ RUN mix local.hex --force && \
     mix local.rebar --force
 
 COPY mix.exs mix.lock ./
+COPY apps/hibiki/mix.exs ./apps/hibiki/
+COPY apps/hibiki_web/mix.exs ./apps/hibiki_web/
+COPY apps/line_sdk/mix.exs ./apps/line_sdk/
+COPY apps/teitoku/mix.exs ./apps/teitoku/
+
+RUN mix do deps.get --only ${MIX_ENV}, deps.compile
+
 COPY rel ./rel
 COPY apps ./apps
 COPY config ./config
 
-RUN mix deps.get && \
-    mix release
+ARG TAG
+RUN mix do release
+# RUN mix do deps.get --only ${MIX_ENV}, release
 
 # ===========================================
 
