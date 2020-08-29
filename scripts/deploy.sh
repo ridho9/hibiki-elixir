@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-ssh -T root@hibiki.ridho.dev << EOF
+ssh root@hibiki.ridho.dev /bin/bash << EOF
     cd hibiki-elixir/src
     git checkout master
     git pull
