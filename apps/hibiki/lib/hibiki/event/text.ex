@@ -11,8 +11,15 @@ defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Text do
     text =
       Regex.run(~r/#([^\n#]+)#/, text)
       |> case do
-        [_, tag] -> "!tag - #{tag}"
-        _ -> text
+        [_, tag] ->
+          if String.at(tag, -1) != " " do
+            "!tag - #{tag}"
+          else
+            text
+          end
+
+        _ ->
+          text
       end
 
     cond do
