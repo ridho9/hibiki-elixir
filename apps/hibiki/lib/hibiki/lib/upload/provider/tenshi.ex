@@ -28,10 +28,7 @@ defmodule Hibiki.Upload.Provider.Tenshi do
           timeout: 60_000
         )
 
-      Logger.info("post result #{inspect(result)}")
-
-      rm_res = File.rm(path)
-      Logger.info("rm result #{inspect(rm_res)}")
+      File.rm(path)
 
       # with {:ok, %HTTPoison.Response{body: body}} <- result,
       res =
