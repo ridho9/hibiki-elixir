@@ -18,7 +18,7 @@ defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Command do
         Logger.info("start handle command")
 
         res = Teitoku.Command.handle(command, args, ctx)
-        Logger.info("end handle command", command_result: res)
+        Logger.info("end handle command")
 
         res
 

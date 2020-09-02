@@ -1,6 +1,7 @@
 defmodule Hibiki.Command.Tl do
   use Teitoku.Command
   alias Teitoku.Command.Options
+  require Logger
 
   def name, do: "tl"
 
@@ -20,13 +21,18 @@ defmodule Hibiki.Command.Tl do
       timeout: 30_000
     ]
 
-    with {:ok, body} <- Jason.encode(%{"src" => query}),
-         {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.post(url, body, [], http_config),
-         {:ok, %{"result" => result, "src_lang" => src_lang}} <- Jason.decode(body) do
-      {:reply,
-       %LineSdk.Model.TextMessage{
-         text: "#{query} (#{src_lang}) => #{result}"
-       }}
-    end
+    res =
+      with {:ok, body} <- Jason.encode(%{"src" => query}),
+           {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.post(url, body, [], http_config),
+           {:ok, %{"result" => result, "src_lang" => src_lang}} <- Jason.decode(body) do
+        {:reply,
+         %LineSdk.Model.TextMessage{
+           text: "#{query} (#{src_lang}) => #{result}"
+         }}
+      end
+
+    Logger.debug("res #{inspect(res)}")
+
+    res
   end
 end
