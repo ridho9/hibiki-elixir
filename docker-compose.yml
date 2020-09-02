@@ -16,6 +16,8 @@ services:
             global:
                 aliases:
                     - hibiki
+        volumes:
+            - ./entity_data.dets:./entity_data.dets
     postgres:
         image: postgres
         environment:
