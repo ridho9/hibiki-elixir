@@ -31,7 +31,7 @@ defmodule Hibiki.Command.Tl do
          }}
       end
 
-    Logger.debug("res #{inspect(res)}")
+    Logger.info("res #{inspect(res)}")
 
     res
   end
