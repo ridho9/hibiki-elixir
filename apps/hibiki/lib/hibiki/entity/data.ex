@@ -28,7 +28,7 @@ defmodule Hibiki.Entity.Data do
   def init(args) do
     Logger.info("Initializing Hibiki.Entity.Data")
 
-    table_name = args[:table_name] || :"entity_data.dets"
+    table_name = args[:table_name] || :"data/entity_data.dets"
     {:ok, table} = :dets.open_file(table_name, type: :set)
     {:ok, {table}}
   end
