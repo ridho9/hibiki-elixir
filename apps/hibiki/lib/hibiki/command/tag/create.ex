@@ -5,7 +5,7 @@ defmodule Hibiki.Command.Tag.Create do
 
   def name, do: "create"
 
-  def description, do: "A simple call"
+  def description, do: "Create tag"
 
   def options,
     do:

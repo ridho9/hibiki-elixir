@@ -1,6 +1,8 @@
 # Changelog
 
-## [Unreleased]
+## [1.16.0] - 2020-10-02
+### Added
+- Added !tag upload
 
 ## [1.15.0] - 2020-10-02
 ### Changed
