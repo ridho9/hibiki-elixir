@@ -21,18 +21,13 @@ defmodule Hibiki.Command.Tl do
       timeout: 30_000
     ]
 
-    res =
-      with {:ok, body} <- Jason.encode(%{"src" => query}),
-           {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.post(url, body, [], http_config),
-           {:ok, %{"result" => result, "src_lang" => src_lang}} <- Jason.decode(body) do
-        {:reply,
-         %LineSdk.Model.TextMessage{
-           text: "#{query} (#{src_lang}) => #{result}"
-         }}
-      end
-
-    Logger.info("res #{inspect(res)}")
-
-    res
+    with {:ok, body} <- Jason.encode(%{"src" => query}),
+         {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.post(url, body, [], http_config),
+         {:ok, %{"result" => result, "src_lang" => src_lang}} <- Jason.decode(body) do
+      {:reply,
+       %LineSdk.Model.TextMessage{
+         text: "#{query} (#{src_lang}) => #{result}"
+       }}
+    end
   end
 end
