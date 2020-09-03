@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Added rexbug
 ### Changed
 - Changed Command.Tl to Command.Translate
 
