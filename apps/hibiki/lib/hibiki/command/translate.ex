@@ -1,4 +1,4 @@
-defmodule Hibiki.Command.Tl do
+defmodule Hibiki.Command.Translate do
   use Teitoku.Command
   alias Teitoku.Command.Options
   require Logger

@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Changed
+- Changed Command.Tl to Command.Translate
+
 ## [1.16.0] - 2020-10-02
 ### Added
 - Added !tag upload
