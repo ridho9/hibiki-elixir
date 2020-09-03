@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [17.0] - 2020-10-03
 ### Added
 - Added rexbug
 ### Changed
