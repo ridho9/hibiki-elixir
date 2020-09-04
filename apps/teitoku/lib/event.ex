@@ -58,6 +58,11 @@ defmodule Teitoku.Event do
       {:continue, event} ->
         process_event({:ok, event, ctx}, client, reply_token)
 
+      {:error, err} ->
+        msg = %LineSdk.Model.TextMessage{text: "Internal error occured, please check logs"}
+        LineSdk.Client.send_reply(client, msg, reply_token)
+        {:error, err}
+
       res ->
         res
     end
