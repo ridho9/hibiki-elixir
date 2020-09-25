@@ -26,7 +26,8 @@ defmodule Teitoku.Event do
     converted =
       events
       |> Task.async_stream(fn event -> handle_event(event, client, converter) end,
-        on_timeout: :kill_task
+        on_timeout: :kill_task,
+        timeout: 25000
       )
       |> Enum.to_list()
 
