@@ -19,24 +19,26 @@ defmodule Teitoku.Event do
 
   @spec handle(LineSdk.Model.WebhookEvent.t(), LineSdk.Client.t(), module()) :: any
   def handle(%LineSdk.Model.WebhookEvent{events: events}, client, converter) do
+    # converted =
+    #   events
+    #   |> Enum.map(fn event -> handle_event(event, client, converter) end)
+
     converted =
       events
-      |> Enum.map(fn event ->
-        reply_token = Map.get(event, :reply_token) || Map.get(event, "replyToken")
-
-        res =
-          event
-          |> converter.convert(%{start_time: DateTime.utc_now()})
-          |> process_event(client, reply_token)
-
-        with {:error, err} <- res do
-          Logger.error(inspect(err))
-        end
-
-        res
-      end)
+      |> Task.async_stream(fn event -> handle_event(event, client, converter) end,
+        on_timeout: :kill_task
+      )
+      |> Enum.to_list()
 
     {:ok, converted}
+  end
+
+  def handle_event(event, client, converter) do
+    reply_token = Map.get(event, :reply_token) || Map.get(event, "replyToken")
+
+    event
+    |> converter.convert(%{start_time: DateTime.utc_now()})
+    |> process_event(client, reply_token)
   end
 
   def process_event({:error, err}, _, _) do
@@ -61,6 +63,8 @@ defmodule Teitoku.Event do
       {:error, err} ->
         msg = %LineSdk.Model.TextMessage{text: "Internal error occured, please check logs"}
         LineSdk.Client.send_reply(client, msg, reply_token)
+        Logger.error(inspect(err))
+
         {:error, err}
 
       res ->
