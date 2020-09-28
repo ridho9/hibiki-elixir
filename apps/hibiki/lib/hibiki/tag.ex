@@ -30,7 +30,7 @@ defmodule Hibiki.Tag do
     |> validate_required([:name, :type, :value, :creator, :scope])
     |> validate_inclusion(:type, ["image", "text"])
     |> validate_length(:name, max: 20)
-    |> validate_length(:value, max: 1000)
+    |> validate_length(:value, max: 3000)
     |> validate_tag_image_value()
     |> validate_tag_name()
     |> unique_constraint(:name, name: :tags_scope_id_name_index)

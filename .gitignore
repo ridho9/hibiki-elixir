@@ -30,3 +30,5 @@ erl_crash.dump
 prod.env
 postgres
 hibiki-release.zip
+
+*.ign
