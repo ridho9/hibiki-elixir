@@ -25,7 +25,11 @@ defmodule Teitoku.Event do
 
     converted =
       events
-      |> Task.async_stream(fn event -> handle_event(event, client, converter) end,
+      |> Task.async_stream(
+        fn event ->
+          res = handle_event(event, client, converter)
+          Logger.debug(inspect(res))
+        end,
         on_timeout: :kill_task,
         timeout: 25000
       )
