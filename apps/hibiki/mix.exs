@@ -31,6 +31,9 @@ defmodule Hibiki.MixProject do
       # {:sibling_app_in_umbrella, in_umbrella: true}
       {:rexbug, ">= 1.0.0"},
       {:httpoison, "~> 1.6"},
+      {:tesla, "~> 1.3.0"},
+      {:mint, "~> 1.0"},
+      {:castore, "~> 0.1"},
       {:jason, "~> 1.1"},
       {:temp, "~> 0.4.7"},
       {:ecto_sql, "~> 3.0"},
