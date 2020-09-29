@@ -4,6 +4,8 @@ import Config
 
 config :logger, :console, metadata: [:reply_token, :command, :elapsed_time]
 
+config :tesla, adapter: Tesla.Adapter.Hackney
+
 config :hibiki,
   ecto_repos: [Hibiki.Repo]
 
