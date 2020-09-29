@@ -28,7 +28,7 @@ defmodule Teitoku.Event do
       |> Task.async_stream(
         fn event ->
           res = handle_event(event, client, converter)
-          Logger.debug(inspect(res))
+          Logger.info(inspect(res))
         end,
         on_timeout: :kill_task,
         timeout: 25000
