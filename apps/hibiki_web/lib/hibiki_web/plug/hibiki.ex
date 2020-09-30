@@ -1,6 +1,8 @@
 defmodule HibikiWeb.Plug.Hibiki do
   use Plug.Builder
+  use Plug.ErrorHandler
   import Plug.Conn
+  require Logger
 
   plug(Plug.Parsers,
     parsers: [:json],
@@ -60,6 +62,12 @@ defmodule HibikiWeb.Plug.Hibiki do
       {:error, err} ->
         conn |> send_resp(500, "#{err}")
     end
+  end
+
+  def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
+    Logger.error("Plug error #{kind} - #{reason} - #{stack}")
+
+    send_resp(conn, conn.status, "Something went wrong")
   end
 
   def cache_body(conn, opts) do

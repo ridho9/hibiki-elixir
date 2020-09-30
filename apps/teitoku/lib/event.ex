@@ -23,30 +23,47 @@ defmodule Teitoku.Event do
     #   events
     #   |> Enum.map(fn event -> handle_event(event, client, converter) end)
 
+    # converted =
+    #   events
+    #   |> Task.async_stream(
+    #     fn event ->
+    #       handle_event(event, client, converter)
+    #     end,
+    #     on_timeout: :kill_task,
+    #     timeout: 25000
+    #   )
+    #   |> Enum.to_list()
+    #   |> Enum.map(fn x ->
+    #     Logger.info(inspect(x))
+    #     x
+    #   end)
+
     converted =
       events
-      |> Task.async_stream(
-        fn event ->
+      |> Enum.map(fn event ->
+        Task.start(fn ->
           handle_event(event, client, converter)
-        end,
-        on_timeout: :kill_task,
-        timeout: 25000
-      )
-      |> Enum.to_list()
-      |> Enum.map(fn x ->
-        Logger.info(inspect(x))
-        x
+        end)
       end)
 
     {:ok, converted}
   end
 
   def handle_event(event, client, converter) do
+    start_time = System.system_time(:millisecond)
     reply_token = Map.get(event, :reply_token) || Map.get(event, "replyToken")
+    Logger.metadata(reply_token: reply_token)
 
-    event
-    |> converter.convert(%{start_time: DateTime.utc_now()})
-    |> process_event(client, reply_token)
+    res =
+      event
+      |> converter.convert(%{start_time: DateTime.utc_now()})
+      |> process_event(client, reply_token)
+
+    duration = System.system_time(:millisecond) - start_time
+
+    Logger.info("#{duration}ms - #{inspect(res)}")
+
+    res
   end
 
   def process_event({:error, err}, _, _) do
@@ -54,8 +71,6 @@ defmodule Teitoku.Event do
   end
 
   def process_event({:ok, event, ctx}, client, reply_token) do
-    Logger.metadata(reply_token: reply_token)
-
     Teitoku.HandleableEvent.handle(event, ctx)
     |> case do
       {:reply, message} ->
