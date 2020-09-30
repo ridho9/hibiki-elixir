@@ -27,13 +27,16 @@ defmodule Teitoku.Event do
       events
       |> Task.async_stream(
         fn event ->
-          res = handle_event(event, client, converter)
-          Logger.info(inspect(res))
+          handle_event(event, client, converter)
         end,
         on_timeout: :kill_task,
         timeout: 25000
       )
       |> Enum.to_list()
+      |> Enum.map(fn x ->
+        Logger.info(inspect(x))
+        x
+      end)
 
     {:ok, converted}
   end
