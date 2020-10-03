@@ -10,8 +10,9 @@ defmodule Hibiki.Calc do
     headers = []
 
     with {:ok, %Tesla.Env{status: 200, body: body}} <- post("/calc", data, headers),
-         {:ok, %{"results" => [result | _]}} <- Jason.decode(body),
-         %{"status" => status} = result do
+         {:ok, %{"results" => [result | _]}} <- Jason.decode(body) do
+      %{"status" => status} = result
+
       if status == "ok" do
         {:ok, result}
       else

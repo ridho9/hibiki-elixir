@@ -9,8 +9,8 @@ defmodule Hibiki.Upload.Provider.Tenshi do
   def upload_binary(binary) do
     with {:ok, path} <- Temp.path(),
          :ok <- File.write(path, binary),
-         {:ok, mime} <- mime_file(path),
-         ext = mime |> :mimerl.mime_to_exts() |> hd do
+         {:ok, mime} <- mime_file(path) do
+      ext = mime |> :mimerl.mime_to_exts() |> hd
       Logger.info("mime #{mime} ext #{ext}")
 
       file =
@@ -33,9 +33,10 @@ defmodule Hibiki.Upload.Provider.Tenshi do
       # with {:ok, %HTTPoison.Response{body: body}} <- result,
       res =
         with {:ok, %HTTPoison.Response{body: body}} <- result,
-             {:ok, body} <- Jason.decode(body),
-             Logger.info(inspect(body)),
-             %{"code" => code, "message" => message} = body do
+             {:ok, body} <- Jason.decode(body) do
+          Logger.info(inspect(body))
+          %{"code" => code, "message" => message} = body
+
           case code do
             200 -> {:ok, "https://file.tenshi.dev/download?file=#{message}"}
             _ -> {:error, message}

@@ -10,10 +10,10 @@ defmodule Teitoku.Command.Parser do
       # apply flag default value
       result_opt =
         Enum.reduce(options.flag, result, fn flag, map ->
-          if flag not in result_keys do
-            Map.put(map, flag, false)
-          else
+          if flag in result_keys do
             map
+          else
+            Map.put(map, flag, false)
           end
         end)
         |> Enum.map(fn {key, value} ->

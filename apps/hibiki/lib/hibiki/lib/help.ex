@@ -32,10 +32,10 @@ defmodule Hibiki.Help do
       [
         "Flags:"
         | Enum.map(command.options.flag, fn flag ->
-            if flag not in command.options.hidden do
-              "  -#{flag}: " <> Map.get(command.options.desc, flag, flag)
-            else
+            if flag in command.options.hidden do
               ""
+            else
+              "  -#{flag}: " <> Map.get(command.options.desc, flag, flag)
             end
           end)
       ]

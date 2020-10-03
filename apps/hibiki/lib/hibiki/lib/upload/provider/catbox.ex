@@ -6,8 +6,9 @@ defmodule Hibiki.Upload.Provider.Catbox do
   def upload_binary(binary) do
     with {:ok, path} <- Temp.path(),
          :ok <- File.write(path, binary),
-         {:ok, mime} <- mime_file(path),
-         ext = mime |> :mimerl.mime_to_exts() |> hd do
+         {:ok, mime} <- mime_file(path) do
+      ext = mime |> :mimerl.mime_to_exts() |> hd
+
       file =
         {:file, path,
          {"form-data", [name: "fileToUpload", filename: Path.basename(path) <> ".#{ext}"]}, []}
@@ -31,8 +32,8 @@ defmodule Hibiki.Upload.Provider.Catbox do
   end
 
   def mime_file(path) do
-    with {filetype, 0} <- System.cmd("file", [path, "--mime-type"]),
-         mime = String.slice(filetype, (String.length(path) + 2)..-2) do
+    with {filetype, 0} <- System.cmd("file", [path, "--mime-type"]) do
+      mime = String.slice(filetype, (String.length(path) + 2)..-2)
       {:ok, mime}
     end
   end

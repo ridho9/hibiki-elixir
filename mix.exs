@@ -26,8 +26,8 @@ defmodule HibikiElixir.MixProject do
   defp deps do
     [
       {:rexbug, ">= 1.0.0"},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:credo, "~> 1.4", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.5-pre", only: [:dev, :test], runtime: false}
     ]
   end
 end

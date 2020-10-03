@@ -32,25 +32,26 @@ defmodule Hibiki.Command.Help do
   end
 
   def handle(%{"query" => query}, _ctx) do
-    with {:ok, command, _, parent} <-
-           Teitoku.Command.Registry.resolve_command(Hibiki.Registry, query) do
-      text =
-        [
-          Help.gen_usage(command, parent),
-          "  " <> command.description,
-          Help.gen_flag_desc(command),
-          Help.gen_usage_desc(command),
-          Help.gen_subcommands(command)
-        ]
-        |> Enum.filter(fn x -> x != "" end)
-        |> Enum.join("\n")
+    case Teitoku.Command.Registry.resolve_command(Hibiki.Registry, query) do
+      {:ok, command, _, parent} ->
+        text =
+          [
+            Help.gen_usage(command, parent),
+            "  " <> command.description,
+            Help.gen_flag_desc(command),
+            Help.gen_usage_desc(command),
+            Help.gen_subcommands(command)
+          ]
+          |> Enum.filter(fn x -> x != "" end)
+          |> Enum.join("\n")
 
-      {:reply,
-       %LineSdk.Model.TextMessage{
-         text: text
-       }}
-    else
-      {:error, err} -> {:reply_error, err}
+        {:reply,
+         %LineSdk.Model.TextMessage{
+           text: text
+         }}
+
+      {:error, err} ->
+        {:reply_error, err}
     end
   end
 end
