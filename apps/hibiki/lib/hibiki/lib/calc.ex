@@ -1,15 +1,13 @@
 defmodule Hibiki.Calc do
-  use Tesla, only: [:post], docs: false
-
-  plug(Tesla.Middleware.BaseUrl, "https://web2.0calc.com")
-  plug(Tesla.Middleware.FormUrlencoded)
-
   def calculate(query) do
-    data = %{trig: "deg", s: 0, p: 0, "in[]": query}
+    data = [trig: "deg", s: 0, p: 0, "in[]": query]
 
+    url = "https://web2.0calc.com/calc"
     headers = []
 
-    with {:ok, %Tesla.Env{status: 200, body: body}} <- post("/calc", data, headers),
+    with data = {:form, data},
+         {:ok, %HTTPoison.Response{status_code: 200, body: body}} <-
+           HTTPoison.post(url, data, headers),
          {:ok, %{"results" => [result | _]}} <- Jason.decode(body) do
       %{"status" => status} = result
 
