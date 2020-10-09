@@ -1,5 +1,5 @@
 defmodule Hibiki.Calc do
-  use Tesla
+  use Tesla, only: [:post], docs: false
 
   plug(Tesla.Middleware.BaseUrl, "https://web2.0calc.com")
   plug(Tesla.Middleware.FormUrlencoded)

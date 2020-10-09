@@ -3,7 +3,7 @@ defmodule LineSdk.Client do
   @line_api_url "https://api.line.me/v2"
   @line_api_data_url "https://api-data.line.me/v2"
 
-  use Tesla
+  use Tesla, only: [:get, :post], docs: false
   plug(Tesla.Middleware.BaseUrl, @line_api_url)
 
   @type t :: %__MODULE__{channel_access_token: String.t(), channel_secret: String.t()}
@@ -18,7 +18,7 @@ defmodule LineSdk.Client do
       data
       |> Enum.map(fn x -> LineSdk.MessageObject.to_object(x) end)
 
-    _post(client, "/bot/message/reply", %{
+    post(client, "/bot/message/reply", %{
       "replyToken" => reply_token,
       "messages" => messages
     })
@@ -26,7 +26,7 @@ defmodule LineSdk.Client do
 
   def get_content(client, message_id) do
     with {:ok, %Tesla.Env{body: body, status: 200}} <-
-           _get(client, @line_api_data_url <> "/bot/message/#{message_id}/content") do
+           get(client, @line_api_data_url <> "/bot/message/#{message_id}/content") do
       {:ok, body}
     end
     |> IO.inspect()
@@ -36,7 +36,7 @@ defmodule LineSdk.Client do
     user_id = URI.encode(user_id)
 
     with {:ok, %Tesla.Env{body: body, status: status_code}} <-
-           _get(client, "/bot/profile/#{user_id}"),
+           get(client, "/bot/profile/#{user_id}"),
          {:ok, body} <- Jason.decode(body) do
       case status_code do
         200 -> {:ok, body}
@@ -46,7 +46,7 @@ defmodule LineSdk.Client do
     end
   end
 
-  defp _get(%Client{channel_access_token: access_token}, url) do
+  def get(%Client{channel_access_token: access_token}, url) do
     headers = [
       {"Authorization", "Bearer #{access_token}"}
     ]
@@ -54,7 +54,7 @@ defmodule LineSdk.Client do
     get(url, headers: headers)
   end
 
-  defp _post(%Client{channel_access_token: access_token}, url, data) do
+  def post(%Client{channel_access_token: access_token}, url, data) do
     headers = [
       {"Authorization", "Bearer #{access_token}"},
       {"Content-Type", "application/json"}
