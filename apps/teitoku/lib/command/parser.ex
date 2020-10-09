@@ -1,8 +1,8 @@
 defmodule Teitoku.Command.Parser do
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
   alias Teitoku.Token
 
-  @spec parse(String.t(), Options.t()) :: {:ok, map()} | {:error, String.t()}
+  @spec parse(String.t(), Arguments.t()) :: {:ok, map()} | {:error, String.t()}
   def parse(text, options) do
     with {:ok, result} <- parse_inner(String.trim(text), options) do
       result_keys = Map.keys(result)
@@ -25,15 +25,15 @@ defmodule Teitoku.Command.Parser do
     end
   end
 
-  def parse_inner("", %Options{named: []}) do
+  def parse_inner("", %Arguments{named: []}) do
     {:ok, %{}}
   end
 
-  def parse_inner("", %Options{named: [arg], allow_empty: true}) do
+  def parse_inner("", %Arguments{named: [arg], allow_empty: true}) do
     {:ok, %{arg => ""}}
   end
 
-  def parse_inner("", %Options{named: [arg | _]}) do
+  def parse_inner("", %Arguments{named: [arg | _]}) do
     {:error, "missing argument '#{arg}'"}
   end
 

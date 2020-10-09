@@ -1,5 +1,5 @@
-defmodule Teitoku.Command.Options do
-  alias Teitoku.Command.Options
+defmodule Teitoku.Command.Arguments do
+  alias Teitoku.Command.Arguments
 
   @type t :: %__MODULE__{
           named: list(),
@@ -11,19 +11,19 @@ defmodule Teitoku.Command.Options do
         }
   defstruct named: [], flag: [], allow_empty: false, desc: %{}, hidden: [], name: %{}
 
-  @spec add_named(Options.t(), String.t(), keyword()) :: Options.t()
+  @spec add_named(Arguments.t(), String.t(), keyword()) :: Arguments.t()
   def add_named(%__MODULE__{named: named} = options, name, opt \\ []) do
     %{options | named: named ++ [name]}
     |> add_desc(name, opt)
   end
 
-  @spec add_flag(Options.t(), String.t(), keyword()) :: Options.t()
+  @spec add_flag(Arguments.t(), String.t(), keyword()) :: Arguments.t()
   def add_flag(%__MODULE__{flag: flag} = options, name, opt \\ []) do
     %{options | flag: flag ++ [name]}
     |> add_desc(name, opt)
   end
 
-  @spec allow_empty(Options.t()) :: Options.t()
+  @spec allow_empty(Arguments.t()) :: Arguments.t()
   def allow_empty(options) do
     %{options | allow_empty: true}
   end

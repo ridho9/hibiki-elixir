@@ -1,6 +1,6 @@
 defmodule Hibiki.Command.Translate do
   use Teitoku.Command
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
   require Logger
 
   def name, do: "tl"
@@ -9,8 +9,8 @@ defmodule Hibiki.Command.Translate do
 
   def options,
     do:
-      %Options{}
-      |> Options.add_named("query", desc: "sentence to translate")
+      %Arguments{}
+      |> Arguments.add_named("query", desc: "sentence to translate")
 
   def handle(%{"query" => query}, _ctx) do
     with {:ok, %{"result" => result, "src_lang" => src_lang}} <- Hibiki.Translate.translate(query) do

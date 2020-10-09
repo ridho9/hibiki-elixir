@@ -1,12 +1,12 @@
 defmodule Teitoku.Command do
   @callback name() :: String.t()
-  @callback options() :: Teitoku.Command.Options.t()
+  @callback options() :: Teitoku.Command.Arguments.t()
   @callback description() :: String.t()
   @callback private() :: boolean()
   @callback subcommands() :: list(module())
 
   @callback prehandle() :: list(function())
-  @callback handle(Teitoku.Command.Options.t(), any) :: Teitoku.Event.result()
+  @callback handle(Teitoku.Command.Arguments.t(), any) :: Teitoku.Event.result()
 
   require Logger
 
@@ -34,7 +34,7 @@ defmodule Teitoku.Command do
     quote do
       @behaviour Teitoku.Command
 
-      def options, do: %Teitoku.Command.Options{}
+      def options, do: %Teitoku.Command.Arguments{}
       def description, do: "-- no desc --"
       def private, do: false
       def subcommands, do: []

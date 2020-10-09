@@ -1,6 +1,6 @@
 defmodule Hibiki.Command.Chs do
   use Teitoku.Command
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
 
   def name, do: "chs"
 
@@ -8,8 +8,8 @@ defmodule Hibiki.Command.Chs do
 
   def options,
     do:
-      %Options{}
-      |> Options.add_named("choice", desc: "Choices to select from, separated by space")
+      %Arguments{}
+      |> Arguments.add_named("choice", desc: "Choices to select from, separated by space")
 
   def handle(%{"choice" => choice}, _ctx) do
     select =

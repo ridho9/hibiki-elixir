@@ -1,6 +1,6 @@
 defmodule Hibiki.Command.Tag.Create do
   use Teitoku.Command
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
   alias Hibiki.Tag
 
   def name, do: "create"
@@ -9,11 +9,11 @@ defmodule Hibiki.Command.Tag.Create do
 
   def options,
     do:
-      %Options{}
-      |> Options.add_named("name", desc: "tag name")
-      |> Options.add_named("value", desc: "tag value")
-      |> Options.add_flag("t", desc: "create text tag", name: "text?")
-      |> Options.add_flag("!", hidden: true, name: "global?")
+      %Arguments{}
+      |> Arguments.add_named("name", desc: "tag name")
+      |> Arguments.add_named("value", desc: "tag value")
+      |> Arguments.add_flag("t", desc: "create text tag", name: "text?")
+      |> Arguments.add_flag("!", hidden: true, name: "global?")
 
   def prehandle,
     do: [

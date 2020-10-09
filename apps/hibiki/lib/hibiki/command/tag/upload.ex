@@ -1,7 +1,7 @@
 defmodule Hibiki.Command.Tag.Upload do
   require Logger
   use Teitoku.Command
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
   alias Hibiki.Tag
   alias Hibiki.Entity
   alias Hibiki.Upload
@@ -12,9 +12,9 @@ defmodule Hibiki.Command.Tag.Upload do
 
   def options,
     do:
-      %Options{}
-      |> Options.add_named("name", desc: "tag name")
-      |> Options.add_flag("!", hidden: true, name: "global?")
+      %Arguments{}
+      |> Arguments.add_named("name", desc: "tag name")
+      |> Arguments.add_flag("!", hidden: true, name: "global?")
 
   def prehandle,
     do: [

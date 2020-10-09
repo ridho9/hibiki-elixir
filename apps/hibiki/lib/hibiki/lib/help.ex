@@ -1,5 +1,5 @@
 defmodule Hibiki.Help do
-  alias Teitoku.Command.Options, as: Opt
+  alias Teitoku.Command.Arguments, as: Args
 
   @spec gen_usage(module(), list(module())) :: String.t()
   def gen_usage(command, parent) do
@@ -67,10 +67,10 @@ defmodule Hibiki.Help do
     end
   end
 
-  @spec gen_usage_named(Teitoku.Command.Options.t()) :: String.t()
-  def gen_usage_named(%Opt{named: []}), do: ""
+  @spec gen_usage_named(Teitoku.Command.Arguments.t()) :: String.t()
+  def gen_usage_named(%Args{named: []}), do: ""
 
-  def gen_usage_named(%Opt{named: [name], allow_empty: allow_empty}) do
+  def gen_usage_named(%Args{named: [name], allow_empty: allow_empty}) do
     if allow_empty do
       "[#{name}] "
     else
@@ -78,6 +78,6 @@ defmodule Hibiki.Help do
     end
   end
 
-  def gen_usage_named(%Opt{named: [n | ns]} = opt),
+  def gen_usage_named(%Args{named: [n | ns]} = opt),
     do: "<#{n}>" <> gen_usage_named(%{opt | named: ns})
 end

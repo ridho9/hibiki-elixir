@@ -1,6 +1,6 @@
 defmodule Hibiki.Command.Sauce do
   use Teitoku.Command
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
   alias Hibiki.Sauce
   alias Hibiki.Upload
   alias Hibiki.Entity
@@ -11,9 +11,9 @@ defmodule Hibiki.Command.Sauce do
 
   def options,
     do:
-      %Options{}
-      |> Options.allow_empty()
-      |> Options.add_named("url", desc: "image url, can be empty to use last sent image")
+      %Arguments{}
+      |> Arguments.allow_empty()
+      |> Arguments.add_named("url", desc: "image url, can be empty to use last sent image")
 
   def handle(%{"url" => ""} = args, %{source: source} = ctx) do
     case Entity.Data.get(source, :last_image_id) do

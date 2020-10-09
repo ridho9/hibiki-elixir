@@ -1,6 +1,6 @@
 defmodule Hibiki.Command.Calc do
   use Teitoku.Command
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
 
   def name, do: "calc"
 
@@ -8,9 +8,9 @@ defmodule Hibiki.Command.Calc do
 
   def options,
     do:
-      %Options{}
-      |> Options.add_named("query", desc: "Equation to calculate")
-      |> Options.add_flag("i", desc: "Return result as image")
+      %Arguments{}
+      |> Arguments.add_named("query", desc: "Equation to calculate")
+      |> Arguments.add_flag("i", desc: "Return result as image")
 
   def handle(%{"query" => query, "i" => image}, _ctx) do
     case Hibiki.Calc.calculate(query) do

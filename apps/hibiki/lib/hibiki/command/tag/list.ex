@@ -1,6 +1,6 @@
 defmodule Hibiki.Command.Tag.List do
   use Teitoku.Command
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
 
   def name, do: "list"
 
@@ -8,9 +8,9 @@ defmodule Hibiki.Command.Tag.List do
 
   def options,
     do:
-      %Options{}
-      |> Options.add_named("keyword", desc: "Keyword to filter")
-      |> Options.allow_empty()
+      %Arguments{}
+      |> Arguments.add_named("keyword", desc: "Keyword to filter")
+      |> Arguments.allow_empty()
 
   def handle(%{"keyword" => keyword}, %{source: source, user: user}) do
     user_tags = "User: " <> list_tag_in_scope(user, keyword)

@@ -1,13 +1,13 @@
 defmodule Teitoku.Command.ParserTest do
   use ExUnit.Case
   alias Teitoku.Command.Parser
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
 
   doctest Parser
 
   test "parse 0" do
     input = ""
-    option = %Options{}
+    option = %Arguments{}
 
     result = Parser.parse(input, option)
     expect = {:ok, %{}}
@@ -17,7 +17,7 @@ defmodule Teitoku.Command.ParserTest do
 
   test "parse 1" do
     input = "aaaa"
-    option = %Options{} |> Options.add_named("arg1")
+    option = %Arguments{} |> Arguments.add_named("arg1")
 
     result = Parser.parse(input, option)
     expect = {:ok, %{"arg1" => "aaaa"}}
@@ -27,7 +27,7 @@ defmodule Teitoku.Command.ParserTest do
 
   test "parse 2" do
     input = ""
-    option = %Options{} |> Options.add_named("arg1")
+    option = %Arguments{} |> Arguments.add_named("arg1")
 
     result = Parser.parse(input, option)
     expect = {:error, "missing argument 'arg1'"}
@@ -37,7 +37,7 @@ defmodule Teitoku.Command.ParserTest do
 
   test "parse 3" do
     input = "aaaa bbbb"
-    option = %Options{} |> Options.add_named("arg1")
+    option = %Arguments{} |> Arguments.add_named("arg1")
 
     result = Parser.parse(input, option)
     expect = {:ok, %{"arg1" => input}}
@@ -47,7 +47,7 @@ defmodule Teitoku.Command.ParserTest do
 
   test "parse 4" do
     input = "aaaa bbbb"
-    option = %Options{} |> Options.add_named("arg1") |> Options.add_named("arg2")
+    option = %Arguments{} |> Arguments.add_named("arg1") |> Arguments.add_named("arg2")
 
     result = Parser.parse(input, option)
     expect = {:ok, %{"arg1" => "aaaa", "arg2" => "bbbb"}}
@@ -59,10 +59,10 @@ defmodule Teitoku.Command.ParserTest do
     input = "aaaa bbbb  cccc"
 
     option =
-      %Options{}
-      |> Options.add_named("arg1")
-      |> Options.add_named("arg2")
-      |> Options.add_named("arg3")
+      %Arguments{}
+      |> Arguments.add_named("arg1")
+      |> Arguments.add_named("arg2")
+      |> Arguments.add_named("arg3")
 
     result = Parser.parse(input, option)
     expect = {:ok, %{"arg1" => "aaaa", "arg2" => "bbbb", "arg3" => "cccc"}}
@@ -74,8 +74,8 @@ defmodule Teitoku.Command.ParserTest do
     input = ""
 
     options =
-      %Options{}
-      |> Options.add_flag("flag1")
+      %Arguments{}
+      |> Arguments.add_flag("flag1")
 
     expect = {:ok, %{"flag1" => false}}
     assert Parser.parse(input, options) == expect
@@ -85,8 +85,8 @@ defmodule Teitoku.Command.ParserTest do
     input = "-flag1"
 
     options =
-      %Options{}
-      |> Options.add_flag("flag1")
+      %Arguments{}
+      |> Arguments.add_flag("flag1")
 
     expect = {:ok, %{"flag1" => true}}
     assert Parser.parse(input, options) == expect
@@ -96,9 +96,9 @@ defmodule Teitoku.Command.ParserTest do
     input = "-flag1 aaaa"
 
     options =
-      %Options{}
-      |> Options.add_flag("flag1")
-      |> Options.add_named("arg1")
+      %Arguments{}
+      |> Arguments.add_flag("flag1")
+      |> Arguments.add_named("arg1")
 
     expect = {:ok, %{"flag1" => true, "arg1" => "aaaa"}}
     assert Parser.parse(input, options) == expect
@@ -108,9 +108,9 @@ defmodule Teitoku.Command.ParserTest do
     input = "aaaa"
 
     options =
-      %Options{}
-      |> Options.add_flag("flag1")
-      |> Options.add_named("arg1")
+      %Arguments{}
+      |> Arguments.add_flag("flag1")
+      |> Arguments.add_named("arg1")
 
     expect = {:ok, %{"flag1" => false, "arg1" => "aaaa"}}
     assert Parser.parse(input, options) == expect
@@ -120,9 +120,9 @@ defmodule Teitoku.Command.ParserTest do
     input = ""
 
     options =
-      %Options{}
-      |> Options.add_named("arg1")
-      |> Options.allow_empty()
+      %Arguments{}
+      |> Arguments.add_named("arg1")
+      |> Arguments.allow_empty()
 
     expect = {:ok, %{"arg1" => ""}}
     assert Parser.parse(input, options) == expect
@@ -132,10 +132,10 @@ defmodule Teitoku.Command.ParserTest do
     input = "aaaa"
 
     options =
-      %Options{}
-      |> Options.add_named("arg1")
-      |> Options.add_named("arg2")
-      |> Options.allow_empty()
+      %Arguments{}
+      |> Arguments.add_named("arg1")
+      |> Arguments.add_named("arg2")
+      |> Arguments.allow_empty()
 
     expect = {:ok, %{"arg1" => "aaaa", "arg2" => ""}}
     assert Parser.parse(input, options) == expect
@@ -145,9 +145,9 @@ defmodule Teitoku.Command.ParserTest do
     input = ""
 
     options =
-      %Options{}
-      |> Options.add_named("arg1", name: "argument")
-      |> Options.allow_empty()
+      %Arguments{}
+      |> Arguments.add_named("arg1", name: "argument")
+      |> Arguments.allow_empty()
 
     expect = {:ok, %{"argument" => ""}}
     assert Parser.parse(input, options) == expect

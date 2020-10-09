@@ -1,6 +1,6 @@
 defmodule Hibiki.Command.Code do
   use Teitoku.Command
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
 
   @base_url "https://nhentai.net/api"
 
@@ -12,9 +12,9 @@ defmodule Hibiki.Command.Code do
 
   def options,
     do:
-      %Options{}
-      |> Options.add_named("code", desc: "Code to search")
-      |> Options.add_flag("o", desc: "Add open button")
+      %Arguments{}
+      |> Arguments.add_named("code", desc: "Code to search")
+      |> Arguments.add_flag("o", desc: "Add open button")
 
   def handle(%{"code" => code} = args, _ctx) do
     code = URI.encode_www_form(code)

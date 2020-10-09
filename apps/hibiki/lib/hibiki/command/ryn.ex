@@ -1,6 +1,6 @@
 defmodule Hibiki.Command.Ryn do
   use Teitoku.Command
-  alias Teitoku.Command.Options, as: Opt
+  alias Teitoku.Command.Arguments, as: Args
 
   def name, do: "ryn"
 
@@ -8,9 +8,9 @@ defmodule Hibiki.Command.Ryn do
 
   def options,
     do:
-      %Opt{}
-      |> Opt.add_named("question", desc: "Your question")
-      |> Opt.allow_empty()
+      %Args{}
+      |> Args.add_named("question", desc: "Your question")
+      |> Args.allow_empty()
 
   def handle(%{"question" => question}, _ctx) do
     answer = Enum.random(["yes", "no", "maybe"])

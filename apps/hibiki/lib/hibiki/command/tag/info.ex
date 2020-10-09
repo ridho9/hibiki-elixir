@@ -1,6 +1,6 @@
 defmodule Hibiki.Command.Tag.Info do
   use Teitoku.Command
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
   alias Hibiki.Tag
   alias Hibiki.Entity
 
@@ -10,10 +10,10 @@ defmodule Hibiki.Command.Tag.Info do
 
   def options,
     do:
-      %Options{}
-      |> Options.add_named("name", desc: "tag name")
-      |> Options.add_flag("!", desc: "Search from global scope", name: "global?")
-      |> Options.add_flag("s", desc: "Search from group/room scope", name: "scope?")
+      %Arguments{}
+      |> Arguments.add_named("name", desc: "tag name")
+      |> Arguments.add_flag("!", desc: "Search from global scope", name: "global?")
+      |> Arguments.add_flag("s", desc: "Search from group/room scope", name: "scope?")
 
   def prehandle,
     do: [

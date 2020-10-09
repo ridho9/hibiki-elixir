@@ -1,6 +1,6 @@
 defmodule Hibiki.Command.Case do
   use Teitoku.Command
-  alias Teitoku.Command.Options
+  alias Teitoku.Command.Arguments
 
   def name, do: "case"
 
@@ -8,12 +8,12 @@ defmodule Hibiki.Command.Case do
 
   def options,
     do:
-      %Options{}
-      |> Options.add_named("query", desc: "Thing to be transformed")
-      |> Options.add_flag("u", desc: "To uppercase")
-      |> Options.add_flag("l", desc: "To lowercase")
-      |> Options.add_flag("c", desc: "Capitalize")
-      |> Options.add_flag("m", desc: "Mixed case")
+      %Arguments{}
+      |> Arguments.add_named("query", desc: "Thing to be transformed")
+      |> Arguments.add_flag("u", desc: "To uppercase")
+      |> Arguments.add_flag("l", desc: "To lowercase")
+      |> Arguments.add_flag("c", desc: "Capitalize")
+      |> Arguments.add_flag("m", desc: "Mixed case")
 
   def handle(%{"query" => query, "u" => u, "l" => l, "c" => c, "m" => m}, _ctx) do
     result =

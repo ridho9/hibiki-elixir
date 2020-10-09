@@ -1,6 +1,6 @@
 defmodule Hibiki.Command.Help do
   use Teitoku.Command
-  alias Teitoku.Command.Options, as: Opt
+  alias Teitoku.Command.Arguments, as: Args
   alias Hibiki.Help
 
   def name, do: "help"
@@ -9,9 +9,9 @@ defmodule Hibiki.Command.Help do
 
   def options,
     do:
-      %Opt{}
-      |> Opt.add_named("query", desc: "Command name")
-      |> Opt.allow_empty()
+      %Args{}
+      |> Args.add_named("query", desc: "Command name")
+      |> Args.allow_empty()
 
   def handle(%{"query" => ""}, _ctx) do
     all_command =
