@@ -1,6 +1,7 @@
 defmodule LineSdk.Client do
   alias LineSdk.Client
   @line_api_url "https://api.line.me/v2"
+  @line_api_data_url "https://api-data.line.me/v2"
 
   use Tesla
   plug(Tesla.Middleware.BaseUrl, @line_api_url)
@@ -25,9 +26,10 @@ defmodule LineSdk.Client do
 
   def get_content(client, message_id) do
     with {:ok, %Tesla.Env{body: body, status: 200}} <-
-           _get(client, "/bot/message/#{message_id}/content") do
+           _get(client, @line_api_data_url <> "/bot/message/#{message_id}/content") do
       {:ok, body}
     end
+    |> IO.inspect()
   end
 
   def get_profile(client, user_id) do
@@ -44,21 +46,12 @@ defmodule LineSdk.Client do
     end
   end
 
-  # defp request_options do
-  #   [
-  #     hackney: [pool: :line_client],
-  #     timeout: 60_000,
-  #     recv_timeout: 60_000
-  #   ]
-  # end
-
   defp _get(%Client{channel_access_token: access_token}, url) do
     headers = [
       {"Authorization", "Bearer #{access_token}"}
     ]
 
     get(url, headers: headers)
-    # HTTPoison.get(@line_api_url <> url, headers, request_options())
   end
 
   defp _post(%Client{channel_access_token: access_token}, url, data) do
@@ -69,7 +62,6 @@ defmodule LineSdk.Client do
 
     with {:ok, data} <- Jason.encode(data) do
       post(url, data, headers: headers)
-      # HTTPoison.post(@line_api_url <> url, data, headers, request_options())
     end
   end
 end
