@@ -21,6 +21,7 @@ defmodule Teitoku.Command.Registry do
       {cur_cmd, text, parent}
     else
       {name, rest} = Token.next_token(text)
+      name = String.downcase(name)
 
       Enum.find(cur_cmd.subcommands(), fn cmd -> cmd.name == name end)
       |> case do
