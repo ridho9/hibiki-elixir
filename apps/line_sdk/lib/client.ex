@@ -29,7 +29,6 @@ defmodule LineSdk.Client do
            get(client, @line_api_data_url <> "/bot/message/#{message_id}/content") do
       {:ok, body}
     end
-    |> IO.inspect()
   end
 
   def get_profile(client, user_id) do

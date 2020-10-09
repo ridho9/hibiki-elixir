@@ -25,8 +25,6 @@ defmodule Hibiki.Command.Tag.Create do
         source: source,
         user: user
       }) do
-    scope = source
-
     type =
       if text? do
         "text"
@@ -37,11 +35,11 @@ defmodule Hibiki.Command.Tag.Create do
     creator = user
     name = String.trim(name) |> String.downcase()
 
-    case Tag.create(name, type, value, creator, scope) do
+    case Tag.create(name, type, value, creator, source) do
       {:ok, tag} ->
         {:reply,
          %LineSdk.Model.TextMessage{
-           text: "Successfully created tag '#{tag.name}' in this #{scope.type}"
+           text: "Successfully created tag '#{tag.name}' in this #{source.type}"
          }}
 
       {:error, err} ->

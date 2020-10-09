@@ -62,7 +62,6 @@ defmodule Teitoku.Event do
     duration = System.system_time(:millisecond) - start_time
 
     Logger.info("Finished in: #{duration}ms")
-    # Logger.info("#{duration}ms - #{inspect(res)}")
 
     res
   end

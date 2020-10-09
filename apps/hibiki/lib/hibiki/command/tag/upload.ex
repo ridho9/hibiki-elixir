@@ -28,7 +28,6 @@ defmodule Hibiki.Command.Tag.Upload do
       ) do
     case Tag.by_name(name, source) do
       nil ->
-        # upload last sent image
         source
         |> Entity.Data.get(Entity.Data.Key.last_image_id())
         |> case do

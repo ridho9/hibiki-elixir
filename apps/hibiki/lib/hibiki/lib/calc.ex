@@ -4,9 +4,9 @@ defmodule Hibiki.Calc do
 
     url = "https://web2.0calc.com/calc"
     headers = []
+    data = {:form, data}
 
-    with data = {:form, data},
-         {:ok, %HTTPoison.Response{status_code: 200, body: body}} <-
+    with {:ok, %HTTPoison.Response{status_code: 200, body: body}} <-
            HTTPoison.post(url, data, headers),
          {:ok, %{"results" => [result | _]}} <- Jason.decode(body) do
       %{"status" => status} = result
