@@ -28,15 +28,18 @@ defmodule Hibiki.Upload do
     Logger.info("upload with #{provider} cache key #{inspect(cache_key)}")
 
     case Cache.get(cache_key) do
-      nil ->
+      {:ok, nil} ->
         with {:ok, image_binary} <- LineSdk.Client.get_content(Hibiki.Config.client(), image_id),
              {:ok, image_url} <- upload_binary(provider, image_binary) do
           Cache.set(cache_key, image_url)
           {:ok, image_url}
         end
 
-      image_url ->
+      {:ok, image_url} ->
         {:ok, image_url}
+
+      {:error, err} ->
+        {:error, err}
     end
   end
 end

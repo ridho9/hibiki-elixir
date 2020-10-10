@@ -35,6 +35,7 @@ defmodule Hibiki.MixProject do
       {:temp, "~> 0.4.7"},
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
+      {:cachex, "~> 3.3"},
       {:line_sdk, in_umbrella: true},
       {:teitoku, in_umbrella: true}
     ]

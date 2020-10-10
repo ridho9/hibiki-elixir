@@ -9,8 +9,9 @@ defmodule Hibiki.Application do
     children = [
       # Starts a worker by calling: Hibiki.Worker.start_link(arg)
       # {Hibiki.Worker, arg}
+      {Cachex, name: Hibiki.Cache},
       {Hibiki.Entity.Data, name: Hibiki.Entity.Data},
-      {Hibiki.Cache, name: Hibiki.Cache},
+      # {Hibiki.Cache, name: Hibiki.Cache},
       {Hibiki.Repo, []}
     ]
 
