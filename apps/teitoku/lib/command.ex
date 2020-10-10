@@ -30,6 +30,12 @@ defmodule Teitoku.Command do
     end
   end
 
+  def command?(module) do
+    attributes = module.__info__(:attributes)
+    behaviour = Keyword.get(attributes, :behaviour, [])
+    Teitoku.Command in behaviour
+  end
+
   defmacro __using__(_opts) do
     quote do
       @behaviour Teitoku.Command
@@ -41,6 +47,11 @@ defmodule Teitoku.Command do
       def prehandle, do: []
 
       defoverridable(Teitoku.Command)
+
+      @on_load :on_load
+      def on_load do
+        :ok
+      end
     end
   end
 end
