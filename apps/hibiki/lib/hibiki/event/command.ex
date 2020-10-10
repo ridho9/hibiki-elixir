@@ -6,7 +6,7 @@ end
 defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Command do
   require Logger
 
-  def handle(%Hibiki.Event.Command{text: text}, ctx) do
+  def handle(%Hibiki.Event.Command{text: text}, %{start_time: start_time} = ctx) do
     # start parsing and defining command here
     text
     |> String.slice(1..-1)
@@ -18,7 +18,8 @@ defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Command do
         Logger.info("start handle command")
 
         res = Teitoku.Command.handle(command, args, ctx)
-        Logger.info("end handle command")
+        duration = System.system_time(:millisecond) - start_time
+        Logger.info("end handle command in #{duration}ms")
 
         res
 

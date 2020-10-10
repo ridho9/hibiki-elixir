@@ -56,7 +56,7 @@ defmodule Teitoku.Event do
 
     res =
       event
-      |> converter.convert(%{start_time: DateTime.utc_now()})
+      |> converter.convert(%{start_time: start_time})
       |> process_event(client, reply_token)
 
     duration = System.system_time(:millisecond) - start_time
