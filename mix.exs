@@ -27,7 +27,7 @@ defmodule HibikiElixir.MixProject do
     [
       {:rexbug, ">= 1.0.0"},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:credo, "~> 1.5-pre", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
     ]
   end
 end

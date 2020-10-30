@@ -1,4 +1,4 @@
-defmodule HibikiWeb.Plug.Hibiki do
+defmodule LineSdk.Plug do
   use Plug.Builder
   use Plug.ErrorHandler
   import Plug.Conn
@@ -10,20 +10,20 @@ defmodule HibikiWeb.Plug.Hibiki do
     json_decoder: Jason
   )
 
-  plug(:validate)
-  plug(:process)
+  plug(:validate, builder_opts())
+  plug(:process, builder_opts())
 
   def validate(
         %Plug.Conn{
           assigns: %{raw_body: raw_body}
         } = conn,
-        _opts
+        opts
       ) do
     with {:ok, signature} <- get_signature(conn),
          {:ok, _} <-
            LineSdk.Auth.validate_message(
              raw_body,
-             Hibiki.Config.channel_secret(),
+             opts[:channel_secret],
              signature
            ) do
       conn
@@ -35,9 +35,9 @@ defmodule HibikiWeb.Plug.Hibiki do
     end
   end
 
-  def process(%Plug.Conn{body_params: body} = conn, _opts) do
+  def process(%Plug.Conn{body_params: body} = conn, opts) do
     with {:ok, body} <- LineSdk.Decoder.decode(body),
-         {:ok, _} <- Teitoku.Event.handle(body, Hibiki.Config.client(), Hibiki.Converter) do
+         {:ok, _} <- opts[:handler].handle(conn, body) do
       conn
       |> send_resp(200, 'OK')
     else

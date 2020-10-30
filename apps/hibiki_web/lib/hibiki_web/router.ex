@@ -9,7 +9,13 @@ defmodule HibikiWeb.Router do
     conn |> send_resp(200, "Server is running")
   end
 
-  post("/hibiki", to: HibikiWeb.Plug.Hibiki)
+  post("/hibiki",
+    to: LineSdk.Plug,
+    init_opts: [
+      channel_secret: Hibiki.Config.channel_secret(),
+      handler: Hibiki.WebhookHandler
+    ]
+  )
 
   match _ do
     conn |> send_resp(404, "Oops")
