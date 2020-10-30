@@ -82,7 +82,7 @@ defmodule LineSdk.Decoder do
     {:ok, %Model.SourceRoom{room_id: room_id}}
   end
 
-  def decode([], _), do: []
+  def decode([], _), do: {:ok, []}
 
   def decode([item], opts) do
     with {:ok, item} <- decode(item, opts) do
@@ -98,6 +98,6 @@ defmodule LineSdk.Decoder do
   end
 
   def decode(body, _opts) do
-    {:ok, body}
+    {:eror, "Unable to decode #{inspect(body)}"}
   end
 end

@@ -161,20 +161,20 @@ defmodule LineSdkTest.DecoderTest do
   test "parse message event" do
     input =
       ~s(
-{
-    "type": "message",
-    "replyToken": "reply_token",
-    "source": {
-        "userId": "user_id",
-        "type": "user"
-    },
-    "timestamp": 1575891337932,
-    "message": {
-        "type": "text",
-        "id": "msg_id",
-        "text": "!call"
-    }
-}
+        {
+            "type": "message",
+            "replyToken": "reply_token",
+            "source": {
+                "userId": "user_id",
+                "type": "user"
+            },
+            "timestamp": 1575891337932,
+            "message": {
+                "type": "text",
+                "id": "msg_id",
+                "text": "!call"
+            }
+        }
       )
       |> Jason.decode!()
 
@@ -222,6 +222,16 @@ defmodule LineSdkTest.DecoderTest do
       %Model.TextMessage{text: "hello", id: "id"},
       %Model.TextMessage{text: "hello", id: "id"}
     ]
+
+    assert LineSdk.Decoder.decode(input) == {:ok, expect}
+  end
+
+  test "parse empty list" do
+    input =
+      ~s([])
+      |> Jason.decode!()
+
+    expect = []
 
     assert LineSdk.Decoder.decode(input) == {:ok, expect}
   end
