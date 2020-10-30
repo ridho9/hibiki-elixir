@@ -30,9 +30,7 @@ defmodule LineSdk.MixProject do
       # {:sibling_app_in_umbrella, in_umbrella: true}
       # {:httpoison, "~> 1.6"},
       {:plug, "~> 1.10"},
-      {:tesla, "~> 1.3.0"},
-      {:mint, "~> 1.0"},
-      {:castore, "~> 0.1"},
+      {:httpoison, "~> 1.6"},
       {:jason, "~> 1.1"}
     ]
   end

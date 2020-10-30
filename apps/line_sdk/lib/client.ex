@@ -3,9 +3,6 @@ defmodule LineSdk.Client do
   @line_api_url "https://api.line.me/v2"
   @line_api_data_url "https://api-data.line.me/v2"
 
-  use Tesla, only: [:get, :post], docs: false
-  plug(Tesla.Middleware.BaseUrl, @line_api_url)
-
   @type t :: %__MODULE__{channel_access_token: String.t(), channel_secret: String.t()}
 
   defstruct channel_access_token: "", channel_secret: ""
@@ -25,7 +22,7 @@ defmodule LineSdk.Client do
   end
 
   def get_content(client, message_id) do
-    with {:ok, %Tesla.Env{body: body, status: 200}} <-
+    with {:ok, %HTTPoison.Response{body: body, status_code: 200}} <-
            get(client, @line_api_data_url <> "/bot/message/#{message_id}/content") do
       {:ok, body}
     end
@@ -34,7 +31,7 @@ defmodule LineSdk.Client do
   def get_profile(client, user_id) do
     user_id = URI.encode(user_id)
 
-    with {:ok, %Tesla.Env{body: body, status: status_code}} <-
+    with {:ok, %HTTPoison.Response{body: body, status_code: status_code}} <-
            get(client, "/bot/profile/#{user_id}"),
          {:ok, body} <- Jason.decode(body) do
       case status_code do
@@ -50,7 +47,7 @@ defmodule LineSdk.Client do
       {"Authorization", "Bearer #{access_token}"}
     ]
 
-    get(url, headers: headers)
+    HTTPoison.get(@line_api_url <> url, headers)
   end
 
   def post(%Client{channel_access_token: access_token}, url, data) do
@@ -60,7 +57,7 @@ defmodule LineSdk.Client do
     ]
 
     with {:ok, data} <- Jason.encode(data) do
-      post(url, data, headers: headers)
+      HTTPoison.post(@line_api_url <> url, data, headers)
     end
   end
 end
