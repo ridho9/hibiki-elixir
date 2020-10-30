@@ -10,4 +10,17 @@ defmodule LineSdk.Auth do
   def signature_match?(message, channel_secret, signature) do
     calculate_signature(message, channel_secret) == signature
   end
+
+  def validate_message(body, channel_secret, signature) do
+    signature_match?(
+      body,
+      channel_secret,
+      signature
+    )
+    |> if do
+      {:ok, nil}
+    else
+      {:error, "invalid signature"}
+    end
+  end
 end

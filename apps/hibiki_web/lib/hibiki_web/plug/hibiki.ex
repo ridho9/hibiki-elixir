@@ -6,7 +6,7 @@ defmodule HibikiWeb.Plug.Hibiki do
 
   plug(Plug.Parsers,
     parsers: [:json],
-    body_reader: {HibikiWeb.Plug.Hibiki, :cache_body, []},
+    body_reader: {__MODULE__, :cache_body, []},
     json_decoder: Jason
   )
 
@@ -21,7 +21,7 @@ defmodule HibikiWeb.Plug.Hibiki do
       ) do
     with {:ok, signature} <- get_signature(conn),
          {:ok, _} <-
-           Teitoku.Validation.validate_message(
+           LineSdk.Auth.validate_message(
              raw_body,
              Hibiki.Config.channel_secret(),
              signature
@@ -37,27 +37,9 @@ defmodule HibikiWeb.Plug.Hibiki do
 
   def process(%Plug.Conn{body_params: body} = conn, _opts) do
     with {:ok, body} <- LineSdk.Decoder.decode(body),
-         {:ok, result} <- Teitoku.Event.handle(body, Hibiki.Config.client(), Hibiki.Converter) do
-      [status, _] =
-        List.zip(result)
-        |> Enum.map(fn x ->
-          Tuple.to_list(x)
-        end)
-
-      status_code =
-        if :error in status do
-          500
-        else
-          200
-        end
-
-      result_string =
-        result
-        |> Enum.map(fn x -> inspect(x, pretty: true) end)
-        |> Enum.join("========================\n")
-
+         {:ok, _} <- Teitoku.Event.handle(body, Hibiki.Config.client(), Hibiki.Converter) do
       conn
-      |> send_resp(status_code, result_string)
+      |> send_resp(200, 'OK')
     else
       {:error, err} ->
         conn |> send_resp(500, "#{err}")

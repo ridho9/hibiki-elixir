@@ -19,25 +19,6 @@ defmodule Teitoku.Event do
 
   @spec handle(LineSdk.Model.WebhookEvent.t(), LineSdk.Client.t(), module()) :: any
   def handle(%LineSdk.Model.WebhookEvent{events: events}, client, converter) do
-    # converted =
-    #   events
-    #   |> Enum.map(fn event -> handle_event(event, client, converter) end)
-
-    # converted =
-    #   events
-    #   |> Task.async_stream(
-    #     fn event ->
-    #       handle_event(event, client, converter)
-    #     end,
-    #     on_timeout: :kill_task,
-    #     timeout: 25000
-    #   )
-    #   |> Enum.to_list()
-    #   |> Enum.map(fn x ->
-    #     Logger.info(inspect(x))
-    #     x
-    #   end)
-
     converted =
       events
       |> Enum.map(fn event ->
@@ -61,7 +42,7 @@ defmodule Teitoku.Event do
 
     duration = System.system_time(:millisecond) - start_time
 
-    Logger.info("Finished in: #{duration}ms")
+    Logger.info("event handling finished in: #{duration}ms")
 
     res
   end
