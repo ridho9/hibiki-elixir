@@ -32,3 +32,4 @@ postgres
 hibiki-release.zip
 
 *.ign
+data/

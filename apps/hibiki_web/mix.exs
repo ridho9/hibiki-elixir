@@ -32,7 +32,6 @@ defmodule HibikiWeb.MixProject do
       {:plug_cowboy, "~> 2.4"},
       {:exsync, "~> 0.2", only: :dev},
       {:hibiki, in_umbrella: true},
-      {:teitoku, in_umbrella: true},
       {:line_sdk, in_umbrella: true}
     ]
   end
