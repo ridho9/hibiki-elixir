@@ -64,7 +64,7 @@ defmodule Hibiki.Entity do
 
   @spec admin?(t) :: boolean
   def admin?(entity) do
-    entity.line_id in Application.get_env(:hibiki, :admin_id)
+    entity.line_id in Hibiki.Config.admin_id()
   end
 
   @spec from_source(LineSdk.Model.Source.t()) :: Entity.t()

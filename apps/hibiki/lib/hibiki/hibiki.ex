@@ -6,6 +6,6 @@ defmodule Hibiki do
   end
 
   def tag do
-    Application.get_env(:hibiki, :tag)
+    Application.fetch_env!(:hibiki, :tag)
   end
 end
