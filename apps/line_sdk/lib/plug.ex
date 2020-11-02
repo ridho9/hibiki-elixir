@@ -47,7 +47,7 @@ defmodule LineSdk.Plug do
   end
 
   def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
-    Logger.error("Plug error #{kind} - #{reason} - #{stack}")
+    Logger.error("Plug error #{inspect(kind)} - #{inspect(reason)} - #{inspect(stack)}")
 
     send_resp(conn, conn.status, "Something went wrong")
   end
