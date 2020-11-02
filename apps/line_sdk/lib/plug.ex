@@ -20,7 +20,7 @@ defmodule LineSdk.Plug do
         opts
       ) do
     with {:ok, signature} <- get_signature(conn),
-         IO.inspect("sign #{signature} body #{raw_body} cs #{opts[:channel_secret]}"),
+         IO.inspect("sign #{signature} body #{raw_body} opts #{opts}"),
          {:ok, _} <-
            LineSdk.Auth.validate_message(
              raw_body,
