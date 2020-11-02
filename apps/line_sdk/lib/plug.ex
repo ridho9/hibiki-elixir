@@ -24,7 +24,7 @@ defmodule LineSdk.Plug do
          {:ok, _} <-
            LineSdk.Auth.validate_message(
              raw_body,
-             opts[:client].channel_secret,
+             opts[:channel_secret],
              signature
            ) do
       conn

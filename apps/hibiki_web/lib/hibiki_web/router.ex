@@ -12,7 +12,7 @@ defmodule HibikiWeb.Router do
   post("/hibiki",
     to: LineSdk.Plug,
     init_opts: [
-      client: Hibiki.Config.client(),
+      channel_secret: Hibiki.Config.channel_secret(),
       handler: Hibiki.WebhookHandler
     ]
   )
