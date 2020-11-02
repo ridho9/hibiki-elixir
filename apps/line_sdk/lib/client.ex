@@ -23,7 +23,7 @@ defmodule LineSdk.Client do
 
   def get_content(client, message_id) do
     with {:ok, %HTTPoison.Response{body: body, status_code: 200}} <-
-           get(client, @line_api_data_url <> "/bot/message/#{message_id}/content") do
+           get(client, @line_api_data_url, "/bot/message/#{message_id}/content") do
       {:ok, body}
     end
   end
@@ -42,12 +42,16 @@ defmodule LineSdk.Client do
     end
   end
 
-  def get(%Client{channel_access_token: access_token}, url) do
+  def get(client, url) do
+    get(client, @line_api_url, url)
+  end
+
+  def get(%Client{channel_access_token: access_token}, host, url) do
     headers = [
       {"Authorization", "Bearer #{access_token}"}
     ]
 
-    HTTPoison.get(@line_api_url <> url, headers)
+    HTTPoison.get(host <> url, headers)
   end
 
   def post(%Client{channel_access_token: access_token}, url, data) do
