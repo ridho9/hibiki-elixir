@@ -20,7 +20,6 @@ defmodule LineSdk.Plug do
         opts
       ) do
     with {:ok, signature} <- get_signature(conn),
-         IO.inspect("sign #{signature} body #{raw_body} opts #{inspect(opts)}"),
          {:ok, _} <-
            LineSdk.Auth.validate_message(
              raw_body,
@@ -47,8 +46,8 @@ defmodule LineSdk.Plug do
     end
   end
 
-  def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
-    Logger.error("Plug error #{inspect(kind)} - #{inspect(reason)} - #{inspect(stack)}")
+  def handle_errors(conn, %{kind: kind, reason: reason}) do
+    Logger.error("Plug error #{inspect(kind)} - #{inspect(reason)}")
 
     send_resp(conn, conn.status, "Something went wrong")
   end
