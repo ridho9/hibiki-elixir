@@ -1,10 +1,14 @@
 version: "2.0"
 services:
-    app:
+    hibiki:
         # build: .
         image: rid9/hibiki-elixir:__TAG__
-        ports:
-            - "8080:8080"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.hibiki.rule=Host(`hibiki.ridho.dev`)"
+            - "traefik.http.routers.hibiki.entrypoints=websecure"
+            - "traefik.http.routers.hibiki.tls.certresolver=myresolver"
+            - "traefik.docker.network=global"
         links:
             - postgres
         env_file:
@@ -19,15 +23,12 @@ services:
         volumes:
             - ./data:/app/data
     postgres:
-        image: postgres
+        image: postgres:12
         environment:
             - POSTGRES_PASSWORD=docker
         volumes:
             - ./postgres:/var/lib/postgresql/data
-        networks:
-            default:
 
 networks:
     global:
         external: true
-    default:
