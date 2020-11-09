@@ -23,7 +23,7 @@ defmodule LineSdk.Plug do
          {:ok, _} <-
            LineSdk.Auth.validate_message(
              raw_body,
-             opts[:channel_secret].(),
+             get_channel_secret(opts),
              signature
            ) do
       conn
@@ -56,6 +56,11 @@ defmodule LineSdk.Plug do
     {:ok, body, conn} = read_body(conn, opts)
     conn = update_in(conn.assigns[:raw_body], &[body | &1 || []])
     {:ok, body, conn}
+  end
+
+  defp get_channel_secret(opts) do
+    {mod, fun, arg} = opts[:channel_secret]
+    apply(mod, fun, arg)
   end
 
   defp get_signature(conn) do
