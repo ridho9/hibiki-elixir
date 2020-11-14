@@ -30,7 +30,7 @@ defmodule Hibiki.Command.Calc do
   end
 
   def handle_success(%{"img64" => img}, _query, true) do
-    with {:ok, url} <- Hibiki.Upload.upload_base64(Hibiki.Upload.Provider.Tenshi, img) do
+    with {:ok, url} <- Hibiki.Upload.upload_base64(Hibiki.Upload.Provider.Kryk, img) do
       {:reply,
        %LineSdk.Model.ImageMessage{
          original_url: url,

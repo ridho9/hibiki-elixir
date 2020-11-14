@@ -21,7 +21,7 @@ defmodule Hibiki.Command.Sauce do
         {:reply_error, "Please send an image first"}
 
       image_id ->
-        provider = Upload.Provider.Tenshi
+        provider = Upload.Provider.Kryk
 
         case Upload.upload_from_image_id(provider, image_id) do
           {:ok, image_url} ->

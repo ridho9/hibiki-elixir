@@ -20,7 +20,7 @@ defmodule Hibiki.Command.Upload do
       image_id ->
         Logger.info("image id #{image_id}")
 
-        case Upload.upload_from_image_id(Upload.Provider.Tenshi, image_id) do
+        case Upload.upload_from_image_id(Upload.Provider.Kryk, image_id) do
           {:error, err} ->
             {:reply_error, err}
 
