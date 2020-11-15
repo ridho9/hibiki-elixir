@@ -35,7 +35,25 @@ defmodule Hibiki.Command.Sauce do
   end
 
   def handle(%{"url" => url}, _) do
-    res = url |> Sauce.sauce_all_provider() |> Enum.map(fn x -> "> #{x}" end) |> Enum.join("\n")
+    provider = Sauce.all_provider() |> Enum.map(fn x -> x.name end)
+
+    res =
+      url
+      |> Sauce.sauce_all_provider()
+      |> Enum.map(fn x ->
+        Hibiki.Shorten.shorten!(x)
+      end)
+
+    res =
+      Enum.zip(provider, res)
+      |> Enum.map(fn {p, v} ->
+        "> #{p} #{v}"
+      end)
+      |> Enum.join("\n")
+
+    # |> Enum.map(fn x -> "> #{x}" end)
+    # |> Enum.join("\n")
+
     res = "May the sauce be with you: \n" <> res
 
     {:reply,

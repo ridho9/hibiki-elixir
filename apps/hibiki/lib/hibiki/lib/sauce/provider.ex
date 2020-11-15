@@ -8,6 +8,8 @@ defmodule Hibiki.Sauce.Provider.Saucenao do
 
   def code, do: "sn"
 
+  def name, do: "saucenao"
+
   def sauce(url) do
     url = URI.encode_www_form(url)
     "https://saucenao.com/search.php?url=#{url}"
@@ -18,6 +20,8 @@ defmodule Hibiki.Sauce.Provider.Yandex do
   @behaviour Hibiki.Sauce.Provider
 
   def code, do: "yn"
+
+  def name, do: "yandex"
 
   def sauce(url) do
     url = URI.encode_www_form(url)
