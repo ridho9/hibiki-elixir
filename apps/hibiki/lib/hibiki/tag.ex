@@ -93,6 +93,14 @@ defmodule Hibiki.Tag do
     |> Hibiki.Repo.one()
   end
 
+  def by_id(id) do
+    from(t in Tag,
+      where: t.id == ^id,
+      preload: [:scope, :creator]
+    )
+    |> Hibiki.Repo.one()
+  end
+
   @spec get_from_tiered_scope(String.t(), [Entity.t()]) ::
           Tag.t() | nil
   def get_from_tiered_scope(name, scopes) do
