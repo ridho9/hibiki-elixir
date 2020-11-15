@@ -42,4 +42,10 @@ defmodule Hibiki.Upload do
         {:error, err}
     end
   end
+
+  def from_url(provider, url) do
+    with {:ok, %HTTPoison.Response{body: body}} <- HTTPoison.get(url) do
+      upload_binary(provider, body)
+    end
+  end
 end
