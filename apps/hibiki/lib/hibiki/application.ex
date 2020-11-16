@@ -36,6 +36,17 @@ defmodule Hibiki.Application do
         event_name: "hibiki.command.finish",
         measurement: :duration,
         tags: [:command]
+      ),
+      last_value(
+        "beamvm.system_counts.process_count",
+        event_name: "vm.system_counts",
+        measurement: :process_count
+      ),
+      last_value(
+        "beamvm.memory.total",
+        event_name: "vm.memory",
+        measurement: :total,
+        unit: :byte
       )
     ]
   end
