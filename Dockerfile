@@ -33,6 +33,7 @@ WORKDIR /app
 COPY --from=builder /src/_build/prod/rel/hibiki_elixir/ .
 
 EXPOSE 8080
+EXPOSE 9568
 
 ENTRYPOINT ["/app/bin/hibiki_elixir"]
 CMD ["start"]

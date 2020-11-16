@@ -18,8 +18,16 @@ defimpl Teitoku.HandleableEvent, for: Hibiki.Event.Command do
         Logger.info("start handle command")
 
         res = Teitoku.Command.handle(command, args, ctx)
-        duration = System.system_time(:millisecond) - start_time
-        Logger.info("end handle command in #{duration}ms")
+
+        # duration = System.system_time(:millisecond) - start_time
+        duration = System.monotonic_time() - start_time
+        duration = System.convert_time_unit(duration, :native, :microsecond)
+
+        Logger.info("end handle command in #{duration / 1000}ms")
+
+        :telemetry.execute([:hibiki, :command, :finish], %{duration: duration}, %{
+          command: command
+        })
 
         res
 

@@ -7,7 +7,7 @@ defmodule Teitoku.Event do
   - `{:reply_error, message}` to reply with fail message, won't be logged.
   - `{:error, err}` when error, will be logged.
   - `{:ignore, any}` to ignore result
-  - `{:continue, t()}` to continue handling (for when an event created another event)
+  - `{:continue, t(), ctx}` to continue handling (for when an event created another event)
   """
   @type result ::
           {:ok, any}
@@ -31,7 +31,8 @@ defmodule Teitoku.Event do
   end
 
   def handle_event(event, client, converter) do
-    start_time = System.system_time(:millisecond)
+    # start_time = System.system_time(:millisecond)
+    start_time = System.monotonic_time()
     reply_token = Map.get(event, :reply_token) || Map.get(event, "replyToken")
     Logger.metadata(reply_token: reply_token)
 
@@ -40,9 +41,10 @@ defmodule Teitoku.Event do
       |> converter.convert(%{start_time: start_time})
       |> process_event(client, reply_token)
 
-    duration = System.system_time(:millisecond) - start_time
+    # duration = System.system_time(:millisecond) - start_time
+    duration = System.monotonic_time() - start_time
 
-    Logger.info("event handling finished in: #{duration}ms")
+    Logger.info("event handling finished in: #{duration}")
 
     res
   end

@@ -36,6 +36,9 @@ defmodule Hibiki.MixProject do
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
       {:cachex, "~> 3.3"},
+      {:telemetry, "~> 0.4.2"},
+      {:telemetry_metrics, "~> 0.6.0"},
+      {:telemetry_metrics_prometheus, "~> 0.6.0"},
       {:line_sdk, in_umbrella: true},
       {:teitoku, in_umbrella: true}
     ]
