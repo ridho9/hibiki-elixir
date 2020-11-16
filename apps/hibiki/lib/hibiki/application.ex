@@ -26,13 +26,13 @@ defmodule Hibiki.Application do
   def metrics do
     [
       sum(
-        "hibiki.command.finish.microseconds.total",
+        "hibiki.command.microseconds.total",
         event_name: "hibiki.command.finish",
         measurement: :duration,
         tags: [:command]
       ),
       counter(
-        "hibiki.command.finish.total",
+        "hibiki.command.total",
         event_name: "hibiki.command.finish",
         measurement: :duration,
         tags: [:command]
