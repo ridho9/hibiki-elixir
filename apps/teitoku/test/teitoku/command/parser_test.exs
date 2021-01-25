@@ -152,4 +152,46 @@ defmodule Teitoku.Command.ParserTest do
     expect = {:ok, %{"argument" => ""}}
     assert Parser.parse(input, options) == expect
   end
+
+  test "parse rest 1" do
+    input = "aaaa bbbb cccc"
+
+    option =
+      %Arguments{}
+      |> Arguments.add_named("arg1")
+      |> Arguments.add_named("arg2")
+
+    result = Parser.parse(input, option)
+    expect = {:ok, %{"arg1" => "aaaa", "arg2" => "bbbb cccc"}}
+
+    assert result == expect
+  end
+
+  test "parse rest 2" do
+    input = ~s(aaaa "")
+
+    option =
+      %Arguments{}
+      |> Arguments.add_named("arg1")
+      |> Arguments.add_named("arg2")
+
+    result = Parser.parse(input, option)
+    expect = {:ok, %{"arg1" => "aaaa", "arg2" => ""}}
+
+    assert result == expect
+  end
+
+  test "parse rest 3" do
+    input = ~s(aaaa "a b c ")
+
+    option =
+      %Arguments{}
+      |> Arguments.add_named("arg1")
+      |> Arguments.add_named("arg2")
+
+    result = Parser.parse(input, option)
+    expect = {:ok, %{"arg1" => "aaaa", "arg2" => "a b c "}}
+
+    assert result == expect
+  end
 end

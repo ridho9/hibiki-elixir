@@ -53,7 +53,17 @@ defmodule Teitoku.Command.Parser do
           {:ok, %{}}
 
         [arg] ->
-          result = %{arg => String.trim(text)}
+          text = String.trim(text)
+
+          text =
+            if String.starts_with?(text, ~W(" ' `")) do
+              {token, _} = Token.next_token(text)
+              token
+            else
+              text
+            end
+
+          result = %{arg => text}
           {:ok, result}
 
         [arg_head | arg_rest] ->
