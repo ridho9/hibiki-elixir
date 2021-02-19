@@ -10,11 +10,11 @@ defmodule Hibiki.Command.Chs do
     do:
       %Arguments{}
       |> Arguments.add_named("choice", desc: "Choices to select from, separated by space")
+      |> Arguments.tokenize_last()
 
   def handle(%{"choice" => choice}, _ctx) do
     select =
       choice
-      |> Teitoku.Token.tokenize()
       |> Enum.random()
 
     {:reply,

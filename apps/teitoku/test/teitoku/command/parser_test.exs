@@ -194,4 +194,33 @@ defmodule Teitoku.Command.ParserTest do
 
     assert result == expect
   end
+
+  test "parse tokenize 1" do
+    input = ~s("a 1 2" "a b c")
+
+    option =
+      %Arguments{}
+      |> Arguments.add_named("arg1")
+      |> Arguments.tokenize_last()
+
+    result = Parser.parse(input, option)
+    expect = {:ok, %{"arg1" => ["a 1 2", "a b c"]}}
+
+    assert result == expect
+  end
+
+  test "parse tokenize 2" do
+    input = ~s("1 2 3" "a 1 2" "a b c")
+
+    option =
+      %Arguments{}
+      |> Arguments.add_named("arg0")
+      |> Arguments.add_named("arg1")
+      |> Arguments.tokenize_last()
+
+    result = Parser.parse(input, option)
+    expect = {:ok, %{"arg0" => "1 2 3", "arg1" => ["a 1 2", "a b c"]}}
+
+    assert result == expect
+  end
 end

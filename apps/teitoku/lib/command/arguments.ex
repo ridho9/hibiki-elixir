@@ -7,9 +7,16 @@ defmodule Teitoku.Command.Arguments do
           allow_empty: boolean(),
           desc: map(),
           hidden: list(),
-          name: map()
+          name: map(),
+          tokenize_last: boolean()
         }
-  defstruct named: [], flag: [], allow_empty: false, desc: %{}, hidden: [], name: %{}
+  defstruct named: [],
+            flag: [],
+            allow_empty: false,
+            desc: %{},
+            hidden: [],
+            name: %{},
+            tokenize_last: false
 
   @spec add_named(Arguments.t(), String.t(), keyword()) :: Arguments.t()
   def add_named(%__MODULE__{named: named} = options, name, opt \\ []) do
@@ -26,6 +33,11 @@ defmodule Teitoku.Command.Arguments do
   @spec allow_empty(Arguments.t()) :: Arguments.t()
   def allow_empty(options) do
     %{options | allow_empty: true}
+  end
+
+  @spec tokenize_last(Arguments.t()) :: Arguments.t()
+  def tokenize_last(options) do
+    %{options | tokenize_last: true}
   end
 
   defp add_desc(options, name, settings) do

@@ -56,11 +56,15 @@ defmodule Teitoku.Command.Parser do
           text = String.trim(text)
 
           text =
-            if String.starts_with?(text, ~W(" ' `")) do
-              {token, _} = Token.next_token(text)
-              token
+            if opt.tokenize_last do
+              Token.tokenize(text)
             else
-              text
+              if String.starts_with?(text, ~W(" ' `")) do
+                {token, _} = Token.next_token(text)
+                token
+              else
+                text
+              end
             end
 
           result = %{arg => text}
