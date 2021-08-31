@@ -37,6 +37,7 @@ defmodule Hibiki.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:cachex, "~> 3.3"},
       {:telemetry, "~> 0.4.2"},
+      {:timex, "~> 3.0"},
       {:telemetry_metrics, "~> 0.6.0"},
       {:telemetry_metrics_prometheus, "~> 0.6.0"},
       {:telemetry_poller, "~> 0.5.1"},

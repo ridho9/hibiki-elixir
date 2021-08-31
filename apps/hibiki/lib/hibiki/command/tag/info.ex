@@ -55,13 +55,21 @@ defmodule Hibiki.Command.Tag.Info do
       } ->
         with {:ok, %{"displayName" => display_name}} <-
                LineSdk.Client.get_profile(Hibiki.Config.client(), creator_id) do
+          local_timezone = Timex.Timezone.local()
+
+          local_updated =
+            updated_at
+            |> DateTime.from_naive!(local_timezone.full_name, Tzdata.TimeZoneDatabase)
+            |> DateTime.shift_zone!("Asia/Jakarta", Tzdata.TimeZoneDatabase)
+            |> DateTime.to_string()
+
           msg =
             [
               "[ #{name} ]",
               "Created by: #{display_name}",
               "Type: #{type}",
               "Scope: #{scope.type}",
-              "Updated at: #{updated_at |> NaiveDateTime.to_string()}",
+              "Updated at: #{local_updated}",
               "#{tag_id}:#{creator.id}:#{scope.id}"
             ]
             |> Enum.filter(fn x -> x != nil end)
