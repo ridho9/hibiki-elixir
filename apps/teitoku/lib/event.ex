@@ -57,6 +57,7 @@ defmodule Teitoku.Event do
     Teitoku.HandleableEvent.handle(event, ctx)
     |> case do
       {:reply, message} ->
+        message = reformat_messages(message)
         LineSdk.Client.send_reply(client, message, reply_token)
 
       {:reply_error, err} ->
@@ -77,6 +78,27 @@ defmodule Teitoku.Event do
         res
     end
   end
+
+  defp reformat_messages(message) when is_map(message), do: reformat_messages([message])
+  defp reformat_messages([]), do: []
+
+  defp reformat_messages([%LineSdk.Model.TextMessage{text: text} = msg | rest]) do
+    newmessages =
+      if String.length(text) > 5000 do
+        text
+        |> String.graphemes()
+        |> Enum.chunk_every(5000)
+        |> Enum.map(fn line ->
+          %LineSdk.Model.TextMessage{text: Enum.join(line)}
+        end)
+      else
+        [msg]
+      end
+
+    newmessages ++ reformat_messages(rest)
+  end
+
+  defp reformat_messages(rest), do: rest
 end
 
 defprotocol Teitoku.HandleableEvent do
