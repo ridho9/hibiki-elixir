@@ -55,11 +55,9 @@ defmodule Hibiki.Command.Tag.Info do
       } ->
         with {:ok, %{"displayName" => display_name}} <-
                LineSdk.Client.get_profile(Hibiki.Config.client(), creator_id) do
-          local_timezone = Timex.Timezone.local()
-
           local_updated =
             updated_at
-            |> DateTime.from_naive!(local_timezone.full_name, Tzdata.TimeZoneDatabase)
+            |> DateTime.from_naive!("Etc/UTC", Tzdata.TimeZoneDatabase)
             |> DateTime.shift_zone!("Asia/Jakarta", Tzdata.TimeZoneDatabase)
             |> DateTime.to_string()
 
