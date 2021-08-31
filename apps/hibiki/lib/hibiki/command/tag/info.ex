@@ -34,7 +34,8 @@ defmodule Hibiki.Command.Tag.Info do
         id: tag_id,
         type: type,
         scope: scope,
-        creator: %Entity{line_id: creator_id} = creator
+        creator: %Entity{line_id: creator_id} = creator,
+        updated_at: updated_at
       } ->
         with {:ok, %{"displayName" => display_name}} <-
                LineSdk.Client.get_profile(Hibiki.Config.client(), creator_id) do
@@ -44,6 +45,7 @@ defmodule Hibiki.Command.Tag.Info do
               "Created by: #{display_name}",
               "Type: #{type}",
               "Scope: #{scope.type}",
+              "Updated at: #{updated_at |> NaiveDateTime.to_string()}",
               "#{tag_id}:#{creator.id}:#{scope.id}"
             ]
             |> Enum.filter(fn x -> x != nil end)

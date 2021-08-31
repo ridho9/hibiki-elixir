@@ -40,6 +40,7 @@ defmodule Hibiki.MixProject do
       {:telemetry_metrics, "~> 0.6.0"},
       {:telemetry_metrics_prometheus, "~> 0.6.0"},
       {:telemetry_poller, "~> 0.5.1"},
+      {:tzdata, "~> 1.1"},
       {:line_sdk, in_umbrella: true},
       {:teitoku, in_umbrella: true}
     ]
