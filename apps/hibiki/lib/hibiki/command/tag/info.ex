@@ -11,6 +11,7 @@ defmodule Hibiki.Command.Tag.Info do
   def options,
     do:
       %Arguments{}
+      |> Arguments.allow_empty()
       |> Arguments.add_named("name", desc: "tag name")
       |> Arguments.add_flag("!", desc: "Search from global scope", name: "global?")
       |> Arguments.add_flag("s", desc: "Search from group/room scope", name: "scope?")
@@ -19,6 +20,21 @@ defmodule Hibiki.Command.Tag.Info do
     do: [
       &Hibiki.Command.Tag.Create.check_added/2
     ]
+
+  def handle(%{"name" => ""}, %{source: source, user: user} = _ctx) do
+    global = Hibiki.Entity.global()
+
+    msg =
+      [user, source, global]
+      |> Enum.map(fn scope ->
+        %Hibiki.Entity{type: scope_type} = scope
+        tags = Tag.get_by_scope(scope) |> length()
+        String.capitalize(scope_type) <> ": " <> "#{tags} tag(s)"
+      end)
+      |> Enum.join("\n")
+
+    {:reply, %LineSdk.Model.TextMessage{text: msg}}
+  end
 
   def handle(%{"name" => name} = args, ctx) do
     scope = Hibiki.Command.Tag.resolve_scope(args, ctx)
