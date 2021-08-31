@@ -84,10 +84,10 @@ defmodule Teitoku.Event do
 
   defp reformat_messages([%LineSdk.Model.TextMessage{text: text} = msg | rest]) do
     newmessages =
-      if String.length(text) > 5000 do
+      if String.length(text) > 4000 do
         text
         |> String.graphemes()
-        |> Enum.chunk_every(5000)
+        |> Enum.chunk_every(4000)
         |> Enum.map(fn line ->
           %LineSdk.Model.TextMessage{text: Enum.join(line)}
         end)
