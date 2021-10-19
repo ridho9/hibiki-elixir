@@ -22,6 +22,7 @@ erl_crash.dump
 .elixir_ls
 
 /config/*
+!/config/dev.sample.exs
 !/config/config.exs
 !/config/prod.exs
 !/config/test.exs
