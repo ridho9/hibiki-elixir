@@ -27,3 +27,8 @@ I usually use ngrok, feel free to use whatever if you know how to.
 6. Go to messaging API tab, enable `Use Webhook` if haven't, and set the webhook url to the ngrok https url + "/hibiki" (eg. "https://something.ngrok.io/hibiki")
 7. The ngrok url will change everytime you restart the process, unless you get a premium account.
 8. Send "!call" to your line bot account.
+
+### Migration
+
+Use `ecto` (https://hexdocs.pm/ecto/getting-started.html), afther the dev config is set, use either `mix ecto.migrate` or `mix ecto.rollback`,
+check the migration status with `mix ecto.migrations`
