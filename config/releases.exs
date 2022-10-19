@@ -4,7 +4,8 @@ config :hibiki,
   admin_id: System.fetch_env!("ADMIN_ID") |> String.split(","),
   channel_access_token: System.fetch_env!("CHANNEL_ACCESS_TOKEN"),
   channel_secret: System.fetch_env!("CHANNEL_SECRET"),
-  deepl_proxy: System.fetch_env!("DEEPL_PROXY")
+  deepl_proxy: System.fetch_env!("DEEPL_PROXY"),
+  nhen_cookie: System.fetch_env!("NHEN_COOKIE")
 
 config :hibiki_web,
   port: 8080

@@ -4,7 +4,8 @@ config :hibiki,
   admin_id: ["admin_id"],
   channel_access_token: "channel access token",
   channel_secret: "channel secret",
-  deepl_proxy: "deepl proxy, ignore"
+  deepl_proxy: "deepl proxy, ignore",
+  nhen_cookie: "cookie"
 
 config :hibiki,
   tag: "DEV"

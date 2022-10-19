@@ -19,9 +19,16 @@ defmodule Hibiki.Command.Code do
   def handle(%{"code" => code} = args, _ctx) do
     code = URI.encode_www_form(code)
     url = @base_url <> "/gallery/#{code}"
+    cookie = Application.fetch_env!(:hibiki, :nhen_cookie)
 
     with {:ok, %HTTPoison.Response{body: body}} <-
-           HTTPoison.get(url, [],
+           HTTPoison.get(
+             url,
+             [
+               {"Cookie", cookie},
+               {"User-Agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0"}
+             ],
              follow_redirect: true,
              timeout: 60_000,
              recv_timeout: 60_000,
