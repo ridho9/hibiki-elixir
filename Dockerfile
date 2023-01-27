@@ -28,7 +28,7 @@ RUN mix do release
 # ===========================================
 
 FROM alpine:3
-RUN apk add --no-cache openssl ncurses-libs bash file curl
+RUN apk add --no-cache openssl ncurses-libs bash file curl libstdc++ libgcc
 
 WORKDIR /app
 COPY --from=builder /src/_build/prod/rel/hibiki_elixir/ .
