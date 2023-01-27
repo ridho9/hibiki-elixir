@@ -11,7 +11,8 @@ config :hibiki,
   admin_id: [],
   channel_access_token: nil,
   channel_secret: nil,
-  deepl_proxy: nil
+  deepl_proxy: nil,
+  flaresolverr_host: "http://localhost:8191"
 
 config :hibiki,
   tag: nil

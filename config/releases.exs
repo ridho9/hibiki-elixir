@@ -5,7 +5,7 @@ config :hibiki,
   channel_access_token: System.fetch_env!("CHANNEL_ACCESS_TOKEN"),
   channel_secret: System.fetch_env!("CHANNEL_SECRET"),
   deepl_proxy: System.fetch_env!("DEEPL_PROXY"),
-  nhen_cookie: System.fetch_env!("NHEN_COOKIE")
+  flaresolverr_host: System.fetch_env!("FLARESOLVERR_HOST")
 
 config :hibiki_web,
   port: 8080

@@ -5,7 +5,7 @@ config :hibiki,
   channel_access_token: "channel access token",
   channel_secret: "channel secret",
   deepl_proxy: "deepl proxy, ignore",
-  nhen_cookie: "cookie"
+  flaresolverr_host: "http://localhost:8191"
 
 config :hibiki,
   tag: "DEV"

@@ -8,7 +8,6 @@ defmodule LineSdk.Auth do
   end
 
   def signature_match?(message, channel_secret, signature) do
-    IO.inspect([message, channel_secret, signature])
     calculate_signature(message, channel_secret) == signature
   end
 

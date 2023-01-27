@@ -17,26 +17,41 @@ defmodule Hibiki.Command.Code do
       |> Arguments.add_flag("o", desc: "Add open button")
 
   def handle(%{"code" => code} = args, _ctx) do
-    code = URI.encode_www_form(code)
+    fs_url = Application.fetch_env!(:hibiki, :flaresolverr_host) <> "/v1"
     url = @base_url <> "/gallery/#{code}"
-    cookie = Application.fetch_env!(:hibiki, :nhen_cookie)
+
+    body =
+      %{
+        "cmd" => "request.get",
+        "url" => url,
+        "maxTimeout" => 30000,
+        "session" => "e5eeafea-9d68-11ed-936f-8b1f617f0cbc"
+      }
+      |> Jason.encode!()
+
+    headers = [{"Content-Type", "application/json"}]
 
     with {:ok, %HTTPoison.Response{body: body}} <-
-           HTTPoison.get(
-             url,
-             [
-               {"Cookie", cookie},
-               {"User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0"}
-             ],
-             follow_redirect: true,
-             timeout: 60_000,
-             recv_timeout: 60_000,
-             hackney: [pool: :nhen]
-           ),
-         {:ok, result} <- Jason.decode(body) do
+           HTTPoison.post(fs_url, body, headers),
+         {:ok, result} <- Jason.decode(body),
+         {:ok, result} <- parse_fs_result(result) do
       handle_result(args, result)
     end
+  end
+
+  defp parse_fs_result(%{"status" => "ok", "solution" => %{"response" => response}}) do
+    case Regex.run(~r/>({.*})</, response) do
+      [_, response] ->
+        response = Jason.decode!(response)
+        {:ok, response}
+
+      _ ->
+        {:error, "failed parsing fs body"}
+    end
+  end
+
+  defp parse_fs_result(_) do
+    {:reply_error, "failed fs request"}
   end
 
   defp handle_result(_, %{"error" => err}) do
