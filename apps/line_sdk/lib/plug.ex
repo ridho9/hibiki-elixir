@@ -15,7 +15,7 @@ defmodule LineSdk.Plug do
 
   def validate(
         %Plug.Conn{
-          assigns: %{raw_body: raw_body}
+          assigns: %{raw_body: [raw_body]}
         } = conn,
         opts
       ) do

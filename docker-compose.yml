@@ -22,8 +22,6 @@ services:
                     - hibiki
         volumes:
             - ./data:/app/data
-        ports:
-            - "10000:8080"
     postgres:
         image: postgres:12
         environment:

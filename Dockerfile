@@ -1,5 +1,6 @@
 #FROM elixir:1.10.4-alpine as builder
-FROM hexpm/elixir:1.11.1-erlang-23.0.2-alpine-3.12.0 as builder
+# FROM hexpm/elixir:1.11.1-erlang-23.0.2-alpine-3.12.0 as builder
+FROM hexpm/elixir:1.14.3-erlang-25.2.1-alpine-3.17.0 as builder
 
 ARG MIX_ENV=prod
 
