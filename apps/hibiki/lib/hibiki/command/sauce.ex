@@ -40,9 +40,10 @@ defmodule Hibiki.Command.Sauce do
     res =
       url
       |> Sauce.sauce_all_provider()
-      |> Enum.map(fn x ->
-        Hibiki.Shorten.shorten!(x)
-      end)
+
+    # |> Enum.map(fn x ->
+    #   Hibiki.Shorten.shorten!(x)
+    # end)
 
     res =
       Enum.zip(provider, res)
